@@ -13,7 +13,7 @@ source /usr/share/yunohost/helpers
 # LOAD SETTINGS
 #=================================================
 
-ynh_script_progression --message="Loading installation settings..." --time --weight=1
+ynh_script_progression --message="Loading installation settings..." --weight=1
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -32,7 +32,7 @@ upgrade_type=$(ynh_check_app_version_changed)
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
-ynh_script_progression --message="Backing up $app before upgrading (may take a while)..." --time --weight=1
+ynh_script_progression --message="Backing up $app before upgrading (may take a while)..." --weight=4
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
@@ -48,7 +48,7 @@ ynh_abort_if_errors
 #=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Stopping $app service..." --time --weight=1
+ynh_script_progression --message="Stopping $app service..." --weight=1
 
 ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app.log"
 
@@ -57,7 +57,7 @@ ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app
 # UPGRADE DEPENDENCIES
 #=================================================
 
-ynh_script_progression --message="Upgrading dependencies..." --time --weight=1
+ynh_script_progression --message="Upgrading dependencies..." --weight=11
 
 if [ -n "$(uname -m | grep arm)" ]
 then
@@ -73,7 +73,7 @@ fi
 
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
-    ynh_script_progression --message="Upgrading $app..." --time --weight=1
+    ynh_script_progression --message="Upgrading $app..." --weight=51
 
     temp_folder="$(mktemp -d)"
     tvheadend_deb_dst="$temp_folder/tvheadend_deb.deb"
@@ -95,10 +95,30 @@ fi
 
 
 #=================================================
+# START SYSTEMD SERVICE
+#=================================================
+
+ynh_script_progression --message="Starting $app service..." --weight=1
+
+# Start a systemd service
+ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$app.log"
+#sudo service tvheadend start
+
+
+#=================================================
+# SETUP SSOWAT
+#=================================================
+
+ynh_script_progression --message="Configuring SSOwat..." --weight=1
+
+ynh_app_setting_set --app=$app --key=skipped_uris --value="/"
+
+
+#=================================================
 # RELOAD NGINX
 #=================================================
 
-ynh_script_progression --message="Reloading nginx web server..." --time --weight=1
+ynh_script_progression --message="Reloading nginx web server..." --weight=1
 
 ynh_systemd_action --service_name=nginx --action=reload
 
@@ -107,7 +127,7 @@ ynh_systemd_action --service_name=nginx --action=reload
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Upgrade of $app completed" --time --last
+ynh_script_progression --message="Upgrade of $app completed" --last
 
 
 

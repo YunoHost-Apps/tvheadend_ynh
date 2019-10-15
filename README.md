@@ -61,5 +61,5 @@ To try the testing branch, please proceed like that.
 ```
 sudo yunohost app install https://github.com/SylvainCecchetto/tvheadend_ynh/tree/testing --debug
 or
-sudo yunohost app upgrade REPLACEBYYOURAPP -u https://github.com/SylvainCecchetto/tvheadend_ynh/tree/testing --debug
+sudo yunohost app upgrade tvheadend -u https://github.com/SylvainCecchetto/tvheadend_ynh/tree/testing --debug
 ```
