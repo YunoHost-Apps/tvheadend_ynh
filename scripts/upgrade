@@ -5,20 +5,19 @@
 #=================================================
 # IMPORT GENERIC HELPERS
 #=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
 # LOAD SETTINGS
 #=================================================
-
 ynh_script_progression --message="Loading installation settings..." --weight=1
 
 app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path_url)
+superuser=$(ynh_app_setting_get --app=$app --key=superuser)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 port=$(ynh_app_setting_get --app=$app --key=port)
 stream_port=$(ynh_app_setting_get --app=$app --key=stream_port)
@@ -26,7 +25,6 @@ stream_port=$(ynh_app_setting_get --app=$app --key=stream_port)
 #=================================================
 # CHECK VERSION
 #=================================================
-
 upgrade_type=$(ynh_check_app_version_changed)
 
 #=================================================
@@ -52,11 +50,9 @@ ynh_script_progression --message="Stopping $app service..." --weight=1
 
 ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app.log"
 
-
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-
 ynh_script_progression --message="Upgrading dependencies..." --weight=11
 
 if [ -n "$(uname -m | grep arm)" ]
@@ -66,11 +62,9 @@ else
     ynh_install_app_dependencies $pkg_dependencies_x86
 fi
 
-
 #=================================================
 # INSTALL DEB PACKAGE
 #=================================================
-
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
     ynh_script_progression --message="Upgrading $app..." --weight=51
@@ -97,38 +91,28 @@ fi
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-
 ynh_script_progression --message="Starting $app service..." --weight=1
 
-# Start a systemd service
 ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$app.log"
-#sudo service tvheadend start
-
 
 #=================================================
 # SETUP SSOWAT
 #=================================================
-
 ynh_script_progression --message="Configuring SSOwat..." --weight=1
 
 ynh_app_setting_set --app=$app --key=skipped_uris --value="/"
 
-
 #=================================================
 # RELOAD NGINX
 #=================================================
-
 ynh_script_progression --message="Reloading nginx web server..." --weight=1
 
 ynh_systemd_action --service_name=nginx --action=reload
 
-
 #=================================================
 # END OF SCRIPT
 #=================================================
-
 ynh_script_progression --message="Upgrade of $app completed" --last
-
 
 
 

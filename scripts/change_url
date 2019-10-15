@@ -5,14 +5,12 @@
 #=================================================
 # IMPORT GENERIC HELPERS
 #=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
 # RETRIEVE ARGUMENTS
 #=================================================
-
 old_domain=$YNH_APP_OLD_DOMAIN
 old_path=$YNH_APP_OLD_PATH
 
@@ -21,24 +19,21 @@ new_path=$YNH_APP_NEW_PATH
 
 app=$YNH_APP_INSTANCE_NAME
 
-
 #=================================================
 # LOAD SETTINGS
 #=================================================
-
 ynh_script_progression --message="Loading installation settings..." --weight=1
 
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path_url)
+superuser=$(ynh_app_setting_get --app=$app --key=superuser)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 port=$(ynh_app_setting_get --app=$app --key=port)
 stream_port=$(ynh_app_setting_get --app=$app --key=stream_port)
 
-
 #=================================================
 # CHECK WHICH PARTS SHOULD BE CHANGED
 #=================================================
-
 change_domain=0
 if [ "$old_domain" != "$new_domain" ]
 then
@@ -51,22 +46,18 @@ then
     change_path=1
 fi
 
-
 #=================================================
 # STANDARD MODIFICATIONS
 #=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
-
 ynh_script_progression --message="Stopping $app service..." --weight=1
 
 ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app.log"
 
-
 #=================================================
 # MODIFY URL IN NGINX CONF
 #=================================================
-
 ynh_script_progression --message="Updating nginx web server configuration..." --weight=1
 
 nginx_conf_path=/etc/nginx/conf.d/$old_domain.d/$app.conf
@@ -93,13 +84,11 @@ then
     ynh_store_file_checksum --file="/etc/nginx/conf.d/$new_domain.d/$app.conf"
 fi
 
-
 #=================================================
 # SPECIFIC MODIFICATIONS
 #=================================================
 # ...
 #=================================================
-
 ynh_script_progression --message="Updating $app configuration..." --weight=1
 
 ynh_backup_if_checksum_is_different --file="/etc/default/tvheadend"
@@ -110,7 +99,6 @@ ynh_replace_string --match_string="__PATH_URL__" --replace_string="$path_url" --
 ynh_replace_string --match_string="__STREAM_PORT__" --replace_string="$stream_port" --target_file="/etc/default/tvheadend"
 ynh_replace_string --match_string="__APP__" --replace_string="$app" --target_file="/etc/default/tvheadend"
 ynh_store_file_checksum --file="/etc/default/tvheadend"
-
 
 #=================================================
 # GENERIC FINALISATION
@@ -131,6 +119,4 @@ ynh_systemd_action --service_name=nginx --action=reload
 #=================================================
 # END OF SCRIPT
 #=================================================
-
 ynh_script_progression --message="Change of URL completed for $app" --last
-
