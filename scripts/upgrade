@@ -1,0 +1,115 @@
+#!/bin/bash
+
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# LOAD SETTINGS
+#=================================================
+
+ynh_script_progression --message="Loading installation settings..." --time --weight=1
+
+app=$YNH_APP_INSTANCE_NAME
+
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+path_url=$(ynh_app_setting_get --app=$app --key=path_url)
+final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+port=$(ynh_app_setting_get --app=$app --key=port)
+stream_port=$(ynh_app_setting_get --app=$app --key=stream_port)
+
+#=================================================
+# CHECK VERSION
+#=================================================
+
+upgrade_type=$(ynh_check_app_version_changed)
+
+#=================================================
+# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
+#=================================================
+ynh_script_progression --message="Backing up $app before upgrading (may take a while)..." --time --weight=1
+
+# Backup the current version of the app
+ynh_backup_before_upgrade
+ynh_clean_setup () {
+    # restore it if the upgrade fails
+    ynh_restore_upgradebackup
+}
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
+# STANDARD UPGRADE STEPS
+#=================================================
+# STOP SYSTEMD SERVICE
+#=================================================
+ynh_script_progression --message="Stopping $app service..." --time --weight=1
+
+ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app.log"
+
+
+#=================================================
+# UPGRADE DEPENDENCIES
+#=================================================
+
+ynh_script_progression --message="Upgrading dependencies..." --time --weight=1
+
+if [ -n "$(uname -m | grep arm)" ]
+then
+    ynh_install_app_dependencies $pkg_dependencies_rb
+else
+    ynh_install_app_dependencies $pkg_dependencies_x86
+fi
+
+
+#=================================================
+# INSTALL DEB PACKAGE
+#=================================================
+
+if [ "$upgrade_type" == "UPGRADE_APP" ]
+then
+    ynh_script_progression --message="Upgrading $app..." --time --weight=1
+
+    temp_folder="$(mktemp -d)"
+    tvheadend_deb_dst="$temp_folder/tvheadend_deb.deb"
+
+    if [ -n "$(uname -m | grep arm)" ]
+    then
+        ynh_exec_quiet "wget -q -O $tvheadend_deb_dst $tvheadend_deb_arm"
+    elif [ -n "$(uname -m | grep x86_64)" ]
+    then
+        ynh_exec_quiet "wget -q -O $tvheadend_deb_dst $tvheadend_deb_x86_64"
+    else
+        ynh_exec_quiet "wget -q -O $tvheadend_deb_dst $tvheadend_deb_x86_32"
+    fi
+
+    ynh_package_install "$tvheadend_deb_dst"
+
+    ynh_secure_remove --file="$temp_folder"
+fi
+
+
+#=================================================
+# RELOAD NGINX
+#=================================================
+
+ynh_script_progression --message="Reloading nginx web server..." --time --weight=1
+
+ynh_systemd_action --service_name=nginx --action=reload
+
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Upgrade of $app completed" --time --last
+
+
+
+
+

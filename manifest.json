@@ -4,18 +4,17 @@
     "packaging_format": 1,
     "description": {
         "en": "Tvheadend is a TV streaming server and recorder for Linux, FreeBSD and Android supporting DVB-S, DVB-S2, DVB-C, DVB-T, ATSC, ISDB-T, IPTV, SAT>IP and HDHomeRun as input sources",
-        "fr": "Tveadend est un serveur streaming TV pour Linux et supporte les sources d'entrées DVB-S, DVB-S2, DVB-C, DVB-T, ATSC, ISDB-T, IPTV, SAT>IP et HDHomeRun"
+        "fr": "Tvheadend est un serveur streaming TV pour Linux et supporte les sources d'entrées DVB-S, DVB-S2, DVB-C, DVB-T, ATSC, ISDB-T, IPTV, SAT>IP et HDHomeRun"
     },
-    "version": "4.2",
+    "version": "4.2.8-33~ynh1",
     "url": "https://tvheadend.org",
     "license": "free",
     "maintainer": {
         "name": "Sylvain Cecchetto",
-        "email": "cecchetto.sylvain@me.com",
-        "url": "blog.cecchettosylvain.fr"
+        "email": "cecchetto.sylvain@me.com"
     },
     "requirements": {
-        "yunohost": ">= 2.6.4"
+        "yunohost": ">= 3.5"
     },
     "multi_instance": false,
     "services": [
@@ -27,8 +26,8 @@
                 "name": "domain",
                 "type": "domain",
                 "ask": {
-                    "en": "Choose a domain for the web interface user",
-                    "fr": "Choisissez un nom de domaine pour l'interface utilisateur web"
+                    "en": "Choose a domain name for ynhexample",
+                    "fr": "Choisissez un nom de domaine pour ynhexample"
                 },
                 "example": "example.com"
             },
@@ -36,20 +35,33 @@
                 "name": "path",
                 "type": "path",
                 "ask": {
-                    "en": "Choose a path for the web interface user",
-                    "fr": "Choisissez un chemin pour l'interface utilisateur web"
+                    "en": "Choose a path for ynhexample",
+                    "fr": "Choisissez un chemin pour ynhexample"
                 },
                 "example": "/tvh",
                 "default": "/tvh"
             },
             {
-                "name": "launch_on_boot",
-                "type": "boolean",
+                "name": "superuser",
+                "type": "string",
                 "ask": {
-                    "en": "Launch Tvheadend service at YunoHost server startup",
-                    "fr": "Démarrer le service Tvheadend au démarrage du serveur YunoHost"
+                    "en": "Choose the superuser name in order to login on Tvheadend",
+                    "fr": "Choisissez le nom du superutilisateur pour la connexion à Tvheadend"
                 },
-                "default": true
+                "example": "johndoe"
+            },
+            {
+                "name": "password",
+                "type": "password",
+                "ask": {
+                    "en": "Set the superuser password",
+                    "fr": "Définissez le mot de passe du superutilisateur"
+                },
+                "help": {
+                    "en": "Use the help field to add an information for the admin about this question.",
+                    "fr": "Utilisez le champ aide pour ajouter une information à l'intention de l'administrateur à propos de cette question."
+                },
+                "example": "Choose a password"
             }
         ]
     }
