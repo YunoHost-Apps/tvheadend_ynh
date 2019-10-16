@@ -26,8 +26,8 @@
                 "name": "domain",
                 "type": "domain",
                 "ask": {
-                    "en": "Choose a domain name for ynhexample",
-                    "fr": "Choisissez un nom de domaine pour ynhexample"
+                    "en": "Choose a domain name for Tvheadend",
+                    "fr": "Choisissez un nom de domaine pour Tvheadend"
                 },
                 "example": "example.com"
             },
@@ -35,8 +35,8 @@
                 "name": "path_url",
                 "type": "path",
                 "ask": {
-                    "en": "Choose a path for ynhexample",
-                    "fr": "Choisissez un chemin pour ynhexample"
+                    "en": "Choose a path for Tvheadend",
+                    "fr": "Choisissez un chemin pour Tvheadend"
                 },
                 "example": "/tvh",
                 "default": "/tvh"
