@@ -37,7 +37,7 @@ TVH_HTTP_PORT="__PORT__"
 #   if set to "" will use binary default
 #   else will change the webui root context, useful for proxied
 #   servers
-TVH_HTTP_ROOT="__PATH_URL__"
+TVH_HTTP_ROOT="__PATH__"
 
 # TVH_HTSP_PORT
 #   if set to "" will use binary default

@@ -32,7 +32,7 @@
                 "example": "example.com"
             },
             {
-                "name": "path_url",
+                "name": "path",
                 "type": "path",
                 "ask": {
                     "en": "Choose a path for Tvheadend",

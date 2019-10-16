@@ -18,7 +18,7 @@ ynh_abort_if_errors
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
 domain=$YNH_APP_ARG_DOMAIN
-path_url=$YNH_APP_ARG_PATH_URL
+path_url=$YNH_APP_ARG_PATH
 superuser=$YNH_APP_ARG_SUPERUSER
 password=$YNH_APP_ARG_PASSWORD
 
@@ -41,7 +41,7 @@ ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
 ynh_script_progression --message="Storing installation settings..." --weight=1
 
 ynh_app_setting_set --app=$app --key=domain --value=$domain
-ynh_app_setting_set --app=$app --key=path_url --value=$path_url
+ynh_app_setting_set --app=$app --key=path --value=$path_url
 ynh_app_setting_set --app=$app --key=superuser --value=$superuser
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 
@@ -117,7 +117,7 @@ ynh_add_nginx_config
 cp ../conf/tvheadend /etc/default/tvheadend
 ynh_replace_string --match_string="__CONF_DIR__" --replace_string="$final_path/.hts/tvheadend" --target_file="/etc/default/tvheadend"
 ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file="/etc/default/tvheadend"
-ynh_replace_string --match_string="__PATH_URL__" --replace_string="$path_url" --target_file="/etc/default/tvheadend"
+ynh_replace_string --match_string="__PATH__" --replace_string="$path_url" --target_file="/etc/default/tvheadend"
 ynh_replace_string --match_string="__STREAM_PORT__" --replace_string="$stream_port" --target_file="/etc/default/tvheadend"
 ynh_replace_string --match_string="__APP__" --replace_string="$app" --target_file="/etc/default/tvheadend"
 

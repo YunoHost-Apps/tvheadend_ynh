@@ -1,7 +1,7 @@
 ;; Test complet
     ; Manifest
         domain="domain.tld" (DOMAIN)
-        path_url="/path"    (PATH)
+        path="/path"    (PATH)
         superuser="toto" 
         password="pass"
     ; Checks
