@@ -1,4 +1,4 @@
-# App exemple pour YunoHost
+# Tvheadend pour YunoHost
 
 [![Integration level](https://dash.yunohost.org/integration/tvheadend.svg)](https://dash.yunohost.org/appci/app/tvheadend)  
 [![Install tvheadend with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=tvheadend)
