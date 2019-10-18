@@ -44,7 +44,7 @@ Once the Tvheadend package is installed, go to the chosen URL, login with the su
 
 ## Links
 
- * Report a bug: https://github.com/SylvainCecchetto/tvheadend_ynh/issues
+ * Report a bug: https://github.com/YunoHost-Apps/tvheadend_ynh/issues
  * App website: https://tvheadend.org
  * Upstream app repository: https://github.com/tvheadend/tvheadend
  * YunoHost website: https://yunohost.org/
@@ -55,11 +55,11 @@ Developers info
 ----------------
 
 **Only if you want to use a testing branch for coding, instead of merging directly into master.**
-Please do your pull request to the [testing branch](https://github.com/SylvainCecchetto/tvheadend_ynh/tree/testing).
+Please do your pull request to the [testing branch](https://github.com/YunoHost-Apps/tvheadend_ynh/tree/testing).
 
 To try the testing branch, please proceed like that.
 ```
-sudo yunohost app install https://github.com/SylvainCecchetto/tvheadend_ynh/tree/testing --debug
+sudo yunohost app install https://github.com/YunoHost-Apps/tvheadend_ynh/tree/testing --debug
 or
-sudo yunohost app upgrade tvheadend -u https://github.com/SylvainCecchetto/tvheadend_ynh/tree/testing --debug
+sudo yunohost app upgrade tvheadend -u https://github.com/YunoHost-Apps/tvheadend_ynh/tree/testing --debug
 ```

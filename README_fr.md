@@ -42,7 +42,7 @@ Une fois le paquet Tvheadend installé, allez à l'URL choisie, connectez-vous a
 
 ## Liens
 
- * Signaler un bug: https://github.com/SylvainCecchetto/tvheadend_ynh/issues
+ * Signaler un bug: https://github.com/YunoHost-Apps/tvheadend_ynh/issues
  * Site de l'application: https://tvheadend.org
  * Dépôt de l'application principale: https://github.com/tvheadend/tvheadend
  * Site web YunoHost: https://yunohost.org/
@@ -53,11 +53,11 @@ Informations pour les développeurs
 ----------------
 
 **Seulement si vous voulez utiliser une branche de test pour le codage, au lieu de fusionner directement dans la banche principale.**
-Merci de faire vos pull request sur la [branche testing](https://github.com/SylvainCecchetto/tvheadend_ynh/tree/testing).
+Merci de faire vos pull request sur la [branche testing](https://github.com/YunoHost-Apps/tvheadend_ynh/tree/testing).
 
 Pour essayer la branche testing, procédez comme suit.
 ```
-sudo yunohost app install https://github.com/SylvainCecchetto/tvheadend_ynh/tree/testing --debug
+sudo yunohost app install https://github.com/YunoHost-Apps/tvheadend_ynh/tree/testing --debug
 ou
-sudo yunohost app upgrade tvheadend -u https://github.com/SylvainCecchetto/tvheadend_ynh/tree/testing --debug
+sudo yunohost app upgrade tvheadend -u https://github.com/YunoHost-Apps/tvheadend_ynh/tree/testing --debug
 ```
