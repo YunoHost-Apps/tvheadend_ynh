@@ -48,7 +48,7 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 #=================================================
 # STANDARD MODIFICATIONS
 #=================================================
-# FIND AND OPEN PORTS
+# FIND AND OPEN PORTS (A)
 #=================================================
 ynh_script_progression --message="Configuring firewall..." --weight=16
 
@@ -65,7 +65,7 @@ ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $stream_port
 ynh_app_setting_set --app=$app --key=stream_port --value=$stream_port
 
 #=================================================
-# INSTALL DEPENDENCIES
+# INSTALL DEPENDENCIES (B)
 #=================================================
 ynh_script_progression --message="Installing dependencies..." --weight=11
 
@@ -77,7 +77,7 @@ else
 fi
 
 #=================================================
-# DOWNLOAD AND INSTALL TVHEADEND DEB PACKAGE
+# DOWNLOAD TVHEADEND DEB PACKAGE
 #=================================================
 ynh_script_progression --message="Downloading and installing $app..." --weight=51
 
@@ -94,6 +94,10 @@ else
 	ynh_exec_quiet "wget -q -O $tvheadend_deb_dst $tvheadend_deb_x86_32"
 fi
 
+# The deb install automatically create the hts system user (C)
+#=================================================
+# INSTALL TVHEADEND DEB PACKAGE (D)
+#=================================================
 ynh_package_install "$tvheadend_deb_dst"
 
 ynh_secure_remove --file="$temp_folder"
@@ -101,14 +105,6 @@ ynh_secure_remove --file="$temp_folder"
 # Tvheadend automatically start after install
 # we stop it before the configuration
 ynh_systemd_action --service_name=$app --action="stop"
-
-#=================================================
-# NGINX CONFIGURATION
-#=================================================
-ynh_script_progression --message="Configuring nginx web server..." --weight=2
-
-# Create a dedicated nginx config
-ynh_add_nginx_config
 
 #=================================================
 # MODIFY TVHEADEND CONFIG FILES
@@ -134,7 +130,15 @@ ynh_store_file_checksum --file="/etc/default/tvheadend"
 ynh_store_file_checksum --file="$final_path/.hts/tvheadend/superuser"
 
 #=================================================
-# SETUP LOGROTATE
+# NGINX CONFIGURATION (E)
+#=================================================
+ynh_script_progression --message="Configuring nginx web server..." --weight=2
+
+# Create a dedicated nginx config
+ynh_add_nginx_config
+
+#=================================================
+# SETUP LOGROTATE (F)
 #=================================================
 ynh_script_progression --message="Configuring log rotation..." --weight=1
 
@@ -144,16 +148,9 @@ chmod 666 /var/log/$app.log
 ynh_use_logrotate --logfile=/var/log/$app.log
 
 #=================================================
-# ADVERTISE SERVICE IN ADMIN PANEL
+# ADVERTISE SERVICE IN ADMIN PANEL (G)
 #=================================================
 yunohost service add $app --log "/var/log/$app.log"
-
-#=================================================
-# START TVHEADEND SERVICE
-#=================================================
-ynh_script_progression --message="Starting $app service..." --weight=1
-
-ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$app.log"
 
 #=================================================
 # SETUP SSOWAT
@@ -168,6 +165,13 @@ ynh_app_setting_set --app=$app --key=skipped_uris --value="/"
 ynh_script_progression --message="Reloading nginx web server..." --weight=1
 
 ynh_systemd_action --service_name=nginx --action=reload
+
+#=================================================
+# START TVHEADEND SERVICE (H)
+#=================================================
+ynh_script_progression --message="Starting $app service..." --weight=1
+
+ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$app.log"
 
 #=================================================
 # END OF SCRIPT

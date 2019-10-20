@@ -25,7 +25,15 @@ stream_port=$(ynh_app_setting_get --app=$app --key=stream_port)
 #=================================================
 # STANDARD REMOVE
 #=================================================
-# REMOVE SERVICE FROM ADMIN PANEL
+# STOP AND REMOVE TVHEADEND SERVICE (H)
+#=================================================
+ynh_script_progression --message="Stopping $app service..." --weight=1
+
+# Remove the dedicated systemd config
+ynh_remove_systemd_config
+
+#=================================================
+# REMOVE SERVICE FROM ADMIN PANEL (G)
 #=================================================
 # Remove a service from the admin panel, added by `yunohost service add`
 if ynh_exec_warn_less yunohost service status $app >/dev/null
@@ -35,38 +43,20 @@ then
 fi
 
 #=================================================
-# STOP AND REMOVE TVHEADEND SERVICE
+# REMOVE LOGROTATE CONFIGURATION (F)
 #=================================================
-ynh_script_progression --message="Stopping $app service..." --weight=1
+ynh_script_progression --message="Removing logrotate configuration..." --weight=1
 
-# Remove the dedicated systemd config
-ynh_remove_systemd_config
+# Remove the app-specific logrotate config
+ynh_remove_logrotate
 
-#=================================================
-# REMOVE TVHEADEND
-#=================================================
-ynh_script_progression --message="Removing $app..." --weight=5
+ynh_script_progression --message="Removing $app log file..." --weight=1
 
-ynh_package_autopurge $app
+# Remove the log files
+ynh_secure_remove --file="/var/log/$app.log"
 
 #=================================================
-# REMOVE DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Removing dependencies..." --weight=3
-
-# Remove metapackage and its dependencies
-ynh_remove_app_dependencies
-
-#=================================================
-# REMOVE APP MAIN DIR
-#=================================================
-ynh_script_progression --message="Removing $app main directory..." --weight=1
-
-# Remove the app directory securely (/home/hts folder)
-ynh_secure_remove --file="$final_path"
-
-#=================================================
-# REMOVE NGINX CONFIGURATION
+# REMOVE NGINX CONFIGURATION (E)
 #=================================================
 ynh_script_progression --message="Removing nginx web server configuration..." --weight=1
 
@@ -74,15 +64,38 @@ ynh_script_progression --message="Removing nginx web server configuration..." --
 ynh_remove_nginx_config
 
 #=================================================
-# REMOVE LOGROTATE CONFIGURATION
+# REMOVE TVHEADEND (D)
 #=================================================
-ynh_script_progression --message="Removing logrotate configuration..." --weight=1
+ynh_script_progression --message="Removing $app..." --weight=5
 
-# Remove the app-specific logrotate config
-ynh_remove_logrotate
+ynh_package_autopurge $app
 
 #=================================================
-# CLOSE TVHEADEND PORTS
+# REMOVE APP MAIN DIR (C)
+#=================================================
+ynh_script_progression --message="Removing $app main directory..." --weight=1
+
+# Remove the app directory securely (/home/hts folder)
+ynh_secure_remove --file="$final_path"
+
+#=================================================
+# REMOVE DEDICATED USER (C)
+#=================================================
+ynh_script_progression --message="Removing the dedicated hts system user..." --weight=1
+
+# Delete a system user
+ynh_system_user_delete --username=hts
+
+#=================================================
+# REMOVE DEPENDENCIES (B)
+#=================================================
+ynh_script_progression --message="Removing dependencies..." --weight=3
+
+# Remove metapackage and its dependencies
+ynh_remove_app_dependencies
+
+#=================================================
+# CLOSE TVHEADEND PORTS (A)
 #=================================================
 if yunohost firewall list | grep -q "\- $port$"
 then
@@ -95,25 +108,6 @@ then
     ynh_script_progression --message="Closing port $stream_port..." --weight=4
     ynh_exec_warn_less yunohost firewall disallow TCP $stream_port
 fi
-
-
-#=================================================
-# SPECIFIC REMOVE
-#=================================================
-ynh_script_progression --message="Removing $app log file..." --weight=1
-
-# Remove the log files
-ynh_secure_remove --file="/var/log/$app.log"
-
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# REMOVE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Removing the dedicated hts system user..." --weight=1
-
-# Delete a system user
-ynh_system_user_delete --username=hts
 
 #=================================================
 # END OF SCRIPT
