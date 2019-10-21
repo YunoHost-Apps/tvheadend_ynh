@@ -6,7 +6,7 @@
         "en": "Tvheadend is a TV streaming server and recorder for Linux, FreeBSD and Android supporting DVB-S, DVB-S2, DVB-C, DVB-T, ATSC, ISDB-T, IPTV, SAT>IP and HDHomeRun as input sources",
         "fr": "Tvheadend est un serveur streaming TV pour Linux et supporte les sources d'entrées DVB-S, DVB-S2, DVB-C, DVB-T, ATSC, ISDB-T, IPTV, SAT>IP et HDHomeRun"
     },
-    "version": "4.2.8-34~ynh2",
+    "version": "4.2.8-34~ynh3",
     "url": "https://tvheadend.org",
     "license": "free",
     "maintainer": {

@@ -89,6 +89,11 @@ fi
 
 
 #=================================================
+# PREVENT TVHEADEND BEING UPGRADED THROUGHT APT
+#=================================================
+apt-mark hold tvheadend
+
+#=================================================
 # START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression --message="Starting $app service..." --weight=1
