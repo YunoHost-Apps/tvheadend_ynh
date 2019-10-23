@@ -25,6 +25,7 @@ app=$YNH_APP_INSTANCE_NAME
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
 superuser=$(ynh_app_setting_get --app=$app --key=superuser)
+password=$(ynh_app_setting_get --app=$app --key=password)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 port=$(ynh_app_setting_get --app=$app --key=port)
 stream_port=$(ynh_app_setting_get --app=$app --key=stream_port)
@@ -32,19 +33,19 @@ stream_port=$(ynh_app_setting_get --app=$app --key=stream_port)
 #=================================================
 # STANDARD BACKUP STEPS
 #=================================================
-# STOP SYSTEMD SERVICE
+# STOP TVHEADEND SERVICE
 #=================================================
 ynh_script_progression --message="Stopping $app service..." --weight=1
 
 ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app.log"
 
 #=================================================
-# BACKUP THE APP MAIN DIR
+# BACKUP THE APP MAIN DIR AND CONFIG FILES
 #=================================================
-ynh_script_progression --message="Backing up $app config..." --weight=4
+ynh_script_progression --message="Backing up $app main directory and config files..." --weight=4
 
-ynh_backup --src_path="$final_path"
 ynh_backup --src_path="/etc/default/tvheadend"
+ynh_backup --src_path="$final_path"
 
 #=================================================
 # BACKUP THE NGINX CONFIGURATION
@@ -56,14 +57,15 @@ ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 #=================================================
 # SPECIFIC BACKUP
 #=================================================
-# BACKUP LOGROTATE
+# BACKUP LOGROTATE AND LOG FILE
 #=================================================
-ynh_script_progression --message="Backing up logrotate configuration..." --weight=1
+ynh_script_progression --message="Backing up logrotate configuration and log file..." --weight=1
 
 ynh_backup --src_path="/etc/logrotate.d/$app"
+ynh_backup --src_path="/var/log/$app.log"
 
 #=================================================
-# START SYSTEMD SERVICE
+# START TVHEADEND SERVICE
 #=================================================
 ynh_script_progression --message="Starting $app service..." --weight=1
 
@@ -72,6 +74,6 @@ ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$ap
 #=================================================
 # END OF SCRIPT
 #=================================================
-ynh_script_progression --message="Backup script completed for $app. (YunoHost will then actually copy those files to the archive)." --time --last
+ynh_script_progression --message="Backup script completed for $app. (YunoHost will then actually copy those files to the archive)." --last
 
 
