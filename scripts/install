@@ -103,7 +103,7 @@ ynh_exec_quiet "wget -q -O $tvheadend_deb_dst $tvheadend_deb_url"
 #=================================================
 ynh_script_progression --message="Installing $app..." --weight=24
 
-ynh_package_install "$tvheadend_deb_dst"
+ynh_exec_warn_less dpkg -i $tvheadend_deb_dst
 
 ynh_secure_remove --file="$temp_folder"
 
