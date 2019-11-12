@@ -17,7 +17,7 @@ Multiple EPG sources are supported (over-the-air DVB and ATSC including OpenTV D
 
 Tvheadend works as backend PVR live TV for Kodi.
 
-**Shipped version:** 4.2.8-34
+**Shipped version:** 4.2.8-35
 
 ## Screenshots
 
