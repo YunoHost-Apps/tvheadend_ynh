@@ -17,7 +17,7 @@ Multiple EPG sources are supported (over-the-air DVB and ATSC including OpenTV D
 
 Tvheadend works as backend PVR live TV for Kodi.
 
-**Version incluse:** 4.2.8-35
+**Version incluse:** 4.2.8-36
 
 ## Captures d'écran
 
@@ -36,7 +36,6 @@ Une fois le paquet Tvheadend installé, allez à l'URL choisie, connectez-vous a
 #### Architectures supportées
 
 * x86-64b - [![Build Status](https://ci-apps.yunohost.org/ci/logs/tvheadend%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/tvheadend/)
-* x86-32b - [![Build Status](https://ci-stretch.nohost.me/ci/logs/tvheadend%20%28Apps%29.svg)](https://ci-stretch.nohost.me/ci/apps/tvheadend/)
 * ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/tvheadend%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/tvheadend/)
 
 
