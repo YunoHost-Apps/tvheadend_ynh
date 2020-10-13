@@ -52,14 +52,14 @@ fi
 #=================================================
 # STOP TVHEADEND SERVICE
 #=================================================
-ynh_script_progression --message="Stopping $app service..." --weight=1
+ynh_script_progression --message="Stopping Tvheadend service..." --weight=1
 
 ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app.log"
 
 #=================================================
 # MODIFY URL IN NGINX CONF
 #=================================================
-ynh_script_progression --message="Updating nginx web server configuration..." --weight=1
+ynh_script_progression --message="Updating NGINX web server configuration..." --weight=1
 
 nginx_conf_path=/etc/nginx/conf.d/$old_domain.d/$app.conf
 
@@ -90,7 +90,7 @@ fi
 #=================================================
 # ...
 #=================================================
-ynh_script_progression --message="Updating $app configuration..." --weight=1
+ynh_script_progression --message="Updating Tvheadend configuration..." --weight=1
 
 ynh_backup_if_checksum_is_different --file="/etc/default/tvheadend"
 cp ../conf/tvheadend /etc/default/tvheadend
@@ -106,7 +106,7 @@ ynh_store_file_checksum --file="/etc/default/tvheadend"
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading nginx web server..." --weight=1
+ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
 ynh_systemd_action --service_name=nginx --action=reload
 
@@ -120,4 +120,4 @@ ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$ap
 #=================================================
 # END OF SCRIPT
 #=================================================
-ynh_script_progression --message="Change of URL completed for $app" --last
+ynh_script_progression --message="Change of URL completed for Tvheadend" --last

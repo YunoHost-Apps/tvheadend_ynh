@@ -80,7 +80,7 @@ fi
 #=================================================
 # DOWNLOAD TVHEADEND DEB PACKAGE
 #=================================================
-ynh_script_progression --message="Downloading $app..." --weight=5
+ynh_script_progression --message="Downloading Tvheadend..." --weight=5
 
 temp_folder="$(mktemp -d)"
 tvheadend_deb_dst="$temp_folder/tvheadend_deb.deb"
@@ -101,7 +101,7 @@ ynh_exec_quiet "wget -q -O $tvheadend_deb_dst $tvheadend_deb_url"
 #=================================================
 # INSTALL TVHEADEND DEB PACKAGE
 #=================================================
-ynh_script_progression --message="Installing $app..." --weight=24
+ynh_script_progression --message="Installing Tvheadend..." --weight=24
 
 ynh_exec_warn_less dpkg -i $tvheadend_deb_dst
 
@@ -134,9 +134,9 @@ ynh_store_file_checksum --file="$final_path/.hts/tvheadend/superuser"
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring nginx web server..." --weight=2
+ynh_script_progression --message="Configuring NGINX web server..." --weight=2
 
-# Create a dedicated nginx config
+# Create a dedicated NGINX config
 ynh_add_nginx_config
 
 #=================================================
@@ -164,26 +164,25 @@ ynh_app_setting_set --app=$app --key=skipped_uris --value="/"
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading nginx web server..." --weight=1
+ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
 ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # PREVENT TVHEADEND BEING UPGRADED THROUGHT APT
 #=================================================
-ynh_script_progression --message="Prevent $app being upgraded throught APT..." --weight=1
+ynh_script_progression --message="Prevent Tvheadend being upgraded throught APT..." --weight=1
 
 apt-mark hold tvheadend
 
 #=================================================
 # START TVHEADEND SERVICE
 #=================================================
-ynh_script_progression --message="Starting $app service..." --weight=1
+ynh_script_progression --message="Starting Tvheadend service..." --weight=1
 
 ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$app.log"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
-ynh_script_progression --message="Installation of $app completed, HTTP port is $port and HTSP port is $stream_port" --last
-
+ynh_script_progression --message="Installation of Tvheadend completed, HTTP port is $port and HTSP port is $stream_port" --last
