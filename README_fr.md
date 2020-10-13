@@ -1,11 +1,11 @@
 # Tvheadend pour YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/tvheadend.svg)](https://dash.yunohost.org/appci/app/tvheadend)  
+[![Integration level](https://dash.yunohost.org/integration/tvheadend.svg)](https://dash.yunohost.org/appci/app/tvheadend) ![](https://ci-apps.yunohost.org/ci/badges/tvheadend.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/tvheadend.maintain.svg)  
 [![Install tvheadend with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=tvheadend)
 
 *[Read this readme in english.](./README.md)* 
 
-> *Ce package vous permet d'installer Tvheadend rapidement et simplement sur un serveur Yunohost.  
+> *Ce package vous permet d'installer Tvheadend rapidement et simplement sur un serveur YunoHost.  
 Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l'installer et en profiter.*
 
 ## Vue d'ensemble
@@ -35,7 +35,7 @@ Une fois le paquet Tvheadend installé, allez à l'URL choisie, connectez-vous a
 
 #### Architectures supportées
 
-* x86-64b - [![Build Status](https://ci-apps.yunohost.org/ci/logs/tvheadend%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/tvheadend/)
+* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/tvheadend%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/tvheadend/)
 * ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/tvheadend%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/tvheadend/)
 
 
@@ -48,10 +48,8 @@ Une fois le paquet Tvheadend installé, allez à l'URL choisie, connectez-vous a
 
 ---
 
-Informations pour les développeurs
-----------------
+## Informations pour les développeurs
 
-**Seulement si vous voulez utiliser une branche de test pour le codage, au lieu de fusionner directement dans la banche principale.**
 Merci de faire vos pull request sur la [branche testing](https://github.com/YunoHost-Apps/tvheadend_ynh/tree/testing).
 
 Pour essayer la branche testing, procédez comme suit.
