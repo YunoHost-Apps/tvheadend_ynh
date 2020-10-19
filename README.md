@@ -1,6 +1,6 @@
 # Tvheadend for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/tvheadend.svg)](https://dash.yunohost.org/appci/app/tvheadend)  
+[![Integration level](https://dash.yunohost.org/integration/tvheadend.svg)](https://dash.yunohost.org/appci/app/tvheadend) ![](https://ci-apps.yunohost.org/ci/badges/tvheadend.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/tvheadend.maintain.svg)  
 [![Install tvheadend with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=tvheadend)
 
 *[Lire ce readme en français.](./README_fr.md)*
@@ -23,7 +23,6 @@ Tvheadend works as backend PVR live TV for Kodi.
 
 ![](http://docs.tvheadend.org/images/overall_screenshot.png)
 
-
 ## Configuration
 
 Once the Tvheadend package is installed, go to the chosen URL, login with the superuser credentials and follow the setup wizard.
@@ -36,10 +35,8 @@ Once the Tvheadend package is installed, go to the chosen URL, login with the su
 
 #### Supported architectures
 
-* x86-64b - [![Build Status](https://ci-apps.yunohost.org/ci/logs/tvheadend%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/tvheadend/)
+* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/tvheadend%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/tvheadend/)
 * ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/tvheadend%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/tvheadend/)
-
-
 
 ## Links
 
@@ -50,10 +47,8 @@ Once the Tvheadend package is installed, go to the chosen URL, login with the su
 
 ---
 
-Developers info
-----------------
+## Developers info
 
-**Only if you want to use a testing branch for coding, instead of merging directly into master.**
 Please do your pull request to the [testing branch](https://github.com/YunoHost-Apps/tvheadend_ynh/tree/testing).
 
 To try the testing branch, please proceed like that.
