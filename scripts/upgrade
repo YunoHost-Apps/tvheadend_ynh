@@ -94,7 +94,7 @@ then
     #=================================================
     ynh_script_progression --message="Upgrading Tvheadend..." --weight=24
 
-    ynh_exec_warn_less dpkg -i $tvheadend_deb_dst
+    ynh_exec_warn_less dpkg --force-confold -i $tvheadend_deb_dst
 
     ynh_secure_remove --file="$temp_folder"
 
