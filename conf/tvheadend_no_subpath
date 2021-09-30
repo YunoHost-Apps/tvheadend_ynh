@@ -3,7 +3,7 @@
 
 # systemd
 # See tvheadend --help for more - default "-u hts -g video"
-OPTIONS="-u hts -g video -c __CONF_DIR__ --http_port __PORT__ --htsp_port __STREAM_PORT__ -l /var/log/__APP__.log"
+OPTIONS="-u hts -g video -c __CONF_DIR__ --http_port __PORT__ --htsp_port __STREAM_PORT__"
 
 # sysvinit
 #

@@ -50,7 +50,7 @@ ynh_abort_if_errors
 #=================================================
 ynh_script_progression --message="Stopping Tvheadend service..." --weight=3
 
-ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app.log"
+ynh_systemd_action --service_name=$app --action="stop"
 
 
 #=================================================
@@ -151,7 +151,7 @@ fi
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
-yunohost service add $app --description="TV streaming server and recorder" --log "/var/log/$app.log" --needs_exposed_ports $port $stream_port
+yunohost service add $app --description="TV streaming server and recorder" --needs_exposed_ports $port $stream_port
 
 #=================================================
 # RELOAD NGINX
@@ -170,7 +170,7 @@ apt-mark hold tvheadend
 #=================================================
 ynh_script_progression --message="Starting Tvheadend service..." --weight=1
 
-ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$app.log"
+ynh_systemd_action --service_name=$app --action="start"
 
 #=================================================
 # END OF SCRIPT
