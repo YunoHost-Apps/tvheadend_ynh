@@ -8,13 +8,19 @@
     },
     "version": "4.3.1979~ynh5",
     "url": "https://tvheadend.org",
+    "upstream": {
+        "license": "GPL-3.0",
+        "website": "https://tvheadend.org",
+        "userdoc": "https://tvheadend.org/projects/tvheadend/wiki",
+        "code": "https://github.com/tvheadend/tvheadend"
+    },
     "license": "GPL-3.0",
     "maintainer": {
         "name": "Sylvain Cecchetto",
         "email": "cecchetto.sylvain@me.com"
     },
     "requirements": {
-        "yunohost": ">= 4"
+        "yunohost": ">= 4.1"
     },
     "multi_instance": false,
     "services": [
@@ -24,20 +30,11 @@
         "install" : [
             {
                 "name": "domain",
-                "type": "domain",
-                "ask": {
-                    "en": "Choose a domain name for Tvheadend",
-                    "fr": "Choisissez un nom de domaine pour Tvheadend"
-                },
-                "example": "example.com"
+                "type": "domain"
             },
             {
                 "name": "path",
                 "type": "path",
-                "ask": {
-                    "en": "Choose a path for Tvheadend",
-                    "fr": "Choisissez un chemin pour Tvheadend"
-                },
                 "example": "/tvh",
                 "default": "/tvh"
             },
@@ -52,12 +49,7 @@
             },
             {
                 "name": "password",
-                "type": "password",
-                "ask": {
-                    "en": "Set the superuser password",
-                    "fr": "Définissez le mot de passe du superutilisateur"
-                },
-                "example": "Choose a password"
+                "type": "password"
             }
         ]
     }
