@@ -21,7 +21,7 @@ Tvheadend works as backend PVR live TV for Kodi.
 
 ## Screenshots
 
-![](http://docs.tvheadend.org/images/overall_screenshot.png)
+![](doc/screenshots/overall_screenshot.png)
 
 ## Configuration
 
