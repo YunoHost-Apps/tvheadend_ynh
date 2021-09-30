@@ -50,15 +50,6 @@ ynh_backup --src_path="$final_path"
 ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 
 #=================================================
-# SPECIFIC BACKUP
-#=================================================
-# BACKUP LOGROTATE AND LOG FILE
-#=================================================
-
-ynh_backup --src_path="/etc/logrotate.d/$app"
-ynh_backup --src_path="/var/log/$app.log"
-
-#=================================================
 # END OF SCRIPT
 #=================================================
 ynh_print_info  --message="Backup script completed for Tvheadend. (YunoHost will then actually copy those files to the archive)."
