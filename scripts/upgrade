@@ -77,16 +77,12 @@ then
 
     temp_folder="$(mktemp -d)"
     tvheadend_deb_dst="$temp_folder/tvheadend_deb.deb"
-    tvheadend_deb_url=""
 
     if [ -n "$(uname -m | grep arm)" ]
     then
         tvheadend_deb_url="$tvheadend_deb_arm"
-    elif [ -n "$(uname -m | grep x86_64)" ]
-    then
-        tvheadend_deb_url="$tvheadend_deb_x86_64"
     else
-        tvheadend_deb_url="$tvheadend_deb_x86_32"
+        tvheadend_deb_url="$tvheadend_deb_x86"
     fi
 
     ynh_exec_quiet "wget -q -O $tvheadend_deb_dst $tvheadend_deb_url"
@@ -116,6 +112,8 @@ then
 
     # Copy and modify /home/hts/.hts/tvheadend/superuser
     ynh_add_config --template="superuser" --destination="${conf_dir}/superuser"
+    chown hts:video "${conf_dir}/superuser"
+    chmod 600 "${conf_dir}/superuser"
 
 fi
 

@@ -26,6 +26,7 @@ path_url=$(ynh_app_setting_get --app=$app --key=path)
 superuser=$(ynh_app_setting_get --app=$app --key=superuser)
 password=$(ynh_app_setting_get --app=$app --key=password)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+conf_dir=$(ynh_app_setting_get --app=$app --key=conf_dir)
 port=$(ynh_app_setting_get --app=$app --key=port)
 stream_port=$(ynh_app_setting_get --app=$app --key=stream_port)
 
@@ -44,6 +45,7 @@ test ! -d $final_path \
 #=================================================
 # OPEN TVHEADEND PORTS
 #=================================================
+ynh_script_progression --message="Configuring firewall..." --weight=15
 if yunohost firewall list | grep -q "\- $port$"
 then
     ynh_die --message="Port $port already open (and maybe used by another application)"
@@ -76,16 +78,12 @@ ynh_script_progression --message="Downloading Tvheadend..." --weight=3
 
 temp_folder="$(mktemp -d)"
 tvheadend_deb_dst="$temp_folder/tvheadend_deb.deb"
-tvheadend_deb_url=""
 
 if [ -n "$(uname -m | grep arm)" ]
 then
     tvheadend_deb_url="$tvheadend_deb_arm"
-elif [ -n "$(uname -m | grep x86_64)" ]
-then
-    tvheadend_deb_url="$tvheadend_deb_x86_64"
 else
-    tvheadend_deb_url="$tvheadend_deb_x86_32"
+    tvheadend_deb_url="$tvheadend_deb_x86"
 fi
 
 ynh_exec_quiet "wget -q -O $tvheadend_deb_dst $tvheadend_deb_url"
@@ -129,9 +127,10 @@ ynh_restore_file --origin_path="/etc/logrotate.d/$app"
 ynh_restore_file --origin_path="/var/log/$app.log"
 
 #=================================================
-# ADVERTISE SERVICE IN ADMIN PANEL
+# INTEGRATE SERVICE IN YUNOHOST
 #=================================================
-yunohost service add $app --log "/var/log/$app.log"
+ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
+yunohost service add $app --description="TV streaming server and recorder" --log "/var/log/$app.log"
 
 #=================================================
 # SETUP SSOWAT
