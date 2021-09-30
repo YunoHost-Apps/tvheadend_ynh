@@ -23,7 +23,13 @@ ynh_print_info --message="Loading installation settings..."
 app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get --app=$app --key=domain)
+path_url=$(ynh_app_setting_get --app=$app --key=path)
+superuser=$(ynh_app_setting_get --app=$app --key=superuser)
+password=$(ynh_app_setting_get --app=$app --key=password)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+conf_dir=$(ynh_app_setting_get --app=$app --key=conf_dir)
+port=$(ynh_app_setting_get --app=$app --key=port)
+stream_port=$(ynh_app_setting_get --app=$app --key=stream_port)
 
 #=================================================
 # DECLARE DATA AND CONF FILES TO BACKUP
