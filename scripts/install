@@ -116,6 +116,8 @@ ynh_systemd_action --service_name=$app --action="stop"
 ynh_script_progression --message="Update configuration files..." --weight=1
 
 # Copy and modify /etc/default/tvheadend
+conf_dir=$final_path/.hts/tvheadend
+ynh_app_setting_set --app=$app --key=conf_dir --value=$conf_dir
 ynh_add_config --template="tvheadend" --destination="/etc/default/tvheadend"
 
 # Copy and modify /home/hts/.hts/tvheadend/superuser
