@@ -122,6 +122,8 @@ ynh_add_config --template="tvheadend" --destination="/etc/default/tvheadend"
 
 # Copy and modify /home/hts/.hts/tvheadend/superuser
 ynh_add_config --template="superuser" --destination="${final_path}/.hts/tvheadend/superuser"
+chown hts:video "${final_path}/.hts/tvheadend/superuser"
+chmod 600 "${final_path}/.hts/tvheadend/superuser"
 
 #=================================================
 # NGINX CONFIGURATION
