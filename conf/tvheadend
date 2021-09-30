@@ -3,7 +3,7 @@
 
 # systemd
 # See tvheadend --help for more - default "-u hts -g video"
-OPTIONS="-u hts -g video"
+OPTIONS="-u hts -g video -c __CONF_DIR__ --http_port __PORT__ --http_root __PATH__ --htsp_port __STREAM_PORT__ -l /var/log/__APP__.log"
 
 # sysvinit
 #
@@ -24,7 +24,7 @@ TVH_GROUP="video"
 
 # TVH_CONF_DIR
 #   if set to "" will use ~TVH_USER/.hts/tvheadend
-TVH_CONF_DIR="__CONF_DIR__"
+TVH_CONF_DIR=""
 
 # TVH_ADAPTERS
 #   if set to "" will use all available adapters
@@ -39,17 +39,17 @@ TVH_IPV6=0
 
 # TVH_HTTP_PORT
 #   if set to "" will use binary default
-TVH_HTTP_PORT="__PORT__"
+TVH_HTTP_PORT=""
 
 # TVH_HTTP_ROOT
 #   if set to "" will use binary default
 #   else will change the webui root context, useful for proxied
 #   servers
-TVH_HTTP_ROOT="__PATH__"
+TVH_HTTP_ROOT=""
 
 # TVH_HTSP_PORT
 #   if set to "" will use binary default
-TVH_HTSP_PORT="__STREAM_PORT__"
+TVH_HTSP_PORT=""
 
 # TVH_DEBUG
 #   if set to 1 will output debug to syslog
@@ -57,5 +57,5 @@ TVH_DEBUG=0
 
 # TVH_ARGS
 #   add any other arguments
-TVH_ARGS="-l /var/log/__APP__.log"
+TVH_ARGS=""
 
