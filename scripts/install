@@ -27,7 +27,7 @@ app=$YNH_APP_INSTANCE_NAME
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
 #=================================================
-ynh_script_progression --message="Validating installation parameters..." --weight=2
+ynh_script_progression --message="Validating installation parameters..." --weight=1
 
 final_path=/home/hts # Default path for Tvheadend deb package
 test ! -e "$final_path" || ynh_die --message="The path $final_path already contains a folder"
@@ -38,7 +38,7 @@ ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
 #=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
-ynh_script_progression --message="Storing installation settings..." --weight=2
+ynh_script_progression --message="Storing installation settings..." --weight=1
 
 ynh_app_setting_set --app=$app --key=domain --value=$domain
 ynh_app_setting_set --app=$app --key=path --value=$path_url
@@ -51,19 +51,20 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 #=================================================
 # FIND AND OPEN PORTS
 #=================================================
-ynh_script_progression --message="Configuring firewall..." --weight=15
+ynh_script_progression --message="Finding available ports..." --weight=1
 
-# Find a free port for the web server
+# Find available ports for web interface and streaming
 port=$(ynh_find_port --port=9981)
-# Open this port
-ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
 ynh_app_setting_set --app=$app --key=port --value=$port
 
-# Find a free port for the streaming server
 stream_port=$(ynh_find_port --port=9982)
-# Open this port
-ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $stream_port
 ynh_app_setting_set --app=$app --key=stream_port --value=$stream_port
+
+# Open ports
+ynh_script_progression --message="Configuring firewall..." --weight=15
+ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
+ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $stream_port
+
 
 #=================================================
 # INSTALL DEPENDENCIES
@@ -84,16 +85,12 @@ ynh_script_progression --message="Downloading Tvheadend..." --weight=5
 
 temp_folder="$(mktemp -d)"
 tvheadend_deb_dst="$temp_folder/tvheadend_deb.deb"
-tvheadend_deb_url=""
 
 if [ -n "$(uname -m | grep arm)" ]
 then
     tvheadend_deb_url="$tvheadend_deb_arm"
-elif [ -n "$(uname -m | grep x86_64)" ]
-then
-    tvheadend_deb_url="$tvheadend_deb_x86_64"
 else
-	tvheadend_deb_url="$tvheadend_deb_x86_32"
+	tvheadend_deb_url="$tvheadend_deb_x86"
 fi
 
 ynh_exec_quiet "wget -q -O $tvheadend_deb_dst $tvheadend_deb_url"
@@ -103,7 +100,7 @@ ynh_exec_quiet "wget -q -O $tvheadend_deb_dst $tvheadend_deb_url"
 #=================================================
 ynh_script_progression --message="Installing Tvheadend..." --weight=24
 
-ynh_exec_warn_less dpkg -i $tvheadend_deb_dst
+ynh_exec_warn_less DEBIAN_FRONTEND=noninteractive dpkg -i $tvheadend_deb_dst
 
 ynh_secure_remove --file="$temp_folder"
 
@@ -116,20 +113,17 @@ ynh_systemd_action --service_name=$app --action="stop"
 #=================================================
 # MODIFY TVHEADEND CONFIG FILES
 #=================================================
+ynh_script_progression --message="Update configuration files..." --weight=1
+
 # Copy and modify /etc/default/tvheadend
-cp ../conf/tvheadend /etc/default/tvheadend
-ynh_replace_string --match_string="__CONF_DIR__" --replace_string="$final_path/.hts/tvheadend" --target_file="/etc/default/tvheadend"
-ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file="/etc/default/tvheadend"
-ynh_replace_string --match_string="__PATH__" --replace_string="$path_url" --target_file="/etc/default/tvheadend"
-ynh_replace_string --match_string="__STREAM_PORT__" --replace_string="$stream_port" --target_file="/etc/default/tvheadend"
-ynh_replace_string --match_string="__APP__" --replace_string="$app" --target_file="/etc/default/tvheadend"
-ynh_store_file_checksum --file="/etc/default/tvheadend"
+conf_dir=$final_path/.hts/tvheadend
+ynh_app_setting_set --app=$app --key=conf_dir --value=$conf_dir
+ynh_add_config --template="tvheadend" --destination="/etc/default/tvheadend"
 
 # Copy and modify /home/hts/.hts/tvheadend/superuser
-cp ../conf/superuser $final_path/.hts/tvheadend/superuser
-ynh_replace_string --match_string="__SUPERUSER__" --replace_string="$superuser" --target_file="$final_path/.hts/tvheadend/superuser"
-ynh_replace_string --match_string="__PASSWORD__" --replace_string="$password" --target_file="$final_path/.hts/tvheadend/superuser"
-ynh_store_file_checksum --file="$final_path/.hts/tvheadend/superuser"
+ynh_add_config --template="superuser" --destination="${conf_dir}/superuser"
+chown hts:video "${conf_dir}/superuser"
+chmod 600 "${conf_dir}/superuser"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -150,9 +144,10 @@ chmod 666 /var/log/$app.log
 ynh_use_logrotate --logfile=/var/log/$app.log
 
 #=================================================
-# ADVERTISE SERVICE IN ADMIN PANEL
+# INTEGRATE SERVICE IN YUNOHOST
 #=================================================
-yunohost service add $app --log "/var/log/$app.log"
+ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
+yunohost service add $app --description="TV streaming server and recorder" --log "/var/log/$app.log"
 
 #=================================================
 # SETUP SSOWAT

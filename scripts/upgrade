@@ -20,6 +20,7 @@ path_url=$(ynh_app_setting_get --app=$app --key=path)
 superuser=$(ynh_app_setting_get --app=$app --key=superuser)
 password=$(ynh_app_setting_get --app=$app --key=password)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+conf_dir=$(ynh_app_setting_get --app=$app --key=conf_dir)
 port=$(ynh_app_setting_get --app=$app --key=port)
 stream_port=$(ynh_app_setting_get --app=$app --key=stream_port)
 
@@ -51,17 +52,6 @@ ynh_script_progression --message="Stopping Tvheadend service..." --weight=3
 
 ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app.log"
 
-#=================================================
-# UPGRADE DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Upgrading dependencies..." --weight=15
-
-if [ -n "$(uname -m | grep arm)" ]
-then
-    ynh_install_app_dependencies $pkg_dependencies_rb
-else
-    ynh_install_app_dependencies $pkg_dependencies_x86
-fi
 
 #=================================================
 # UPGRADE TVHEADEND DEB PACKAGE
@@ -69,22 +59,30 @@ fi
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
     #=================================================
+    # UPGRADE DEPENDENCIES
+    #=================================================
+    ynh_script_progression --message="Upgrading dependencies..." --weight=15
+
+    if [ -n "$(uname -m | grep arm)" ]
+    then
+        ynh_install_app_dependencies $pkg_dependencies_rb
+    else
+        ynh_install_app_dependencies $pkg_dependencies_x86
+    fi
+
+    #=================================================
     # DOWNLOAD TVHEADEND DEB PACKAGE
     #=================================================
     ynh_script_progression --message="Downloading Tvheadend..." --weight=5
 
     temp_folder="$(mktemp -d)"
     tvheadend_deb_dst="$temp_folder/tvheadend_deb.deb"
-    tvheadend_deb_url=""
 
     if [ -n "$(uname -m | grep arm)" ]
     then
         tvheadend_deb_url="$tvheadend_deb_arm"
-    elif [ -n "$(uname -m | grep x86_64)" ]
-    then
-        tvheadend_deb_url="$tvheadend_deb_x86_64"
     else
-        tvheadend_deb_url="$tvheadend_deb_x86_32"
+        tvheadend_deb_url="$tvheadend_deb_x86"
     fi
 
     ynh_exec_quiet "wget -q -O $tvheadend_deb_dst $tvheadend_deb_url"
@@ -94,7 +92,7 @@ then
     #=================================================
     ynh_script_progression --message="Upgrading Tvheadend..." --weight=24
 
-    ynh_exec_warn_less dpkg -i $tvheadend_deb_dst
+    ynh_exec_warn_less DEBIAN_FRONTEND=noninteractive dpkg --force-confold -i $tvheadend_deb_dst
 
     ynh_secure_remove --file="$temp_folder"
 
@@ -104,14 +102,30 @@ then
     # we stop it before the configuration
     ynh_systemd_action --service_name=$app --action="stop"
 
-    # Deb install seems to remove the superuser config, let's restore it
+    #=================================================
+    # RESTORE TVHEADEND CONFIG FILES
+    #=================================================
+    ynh_script_progression --message="Restore/update configuration files..." --weight=1
+
+    # Copy and modify /etc/default/tvheadend
+    ynh_add_config --template="tvheadend" --destination="/etc/default/tvheadend"
+
     # Copy and modify /home/hts/.hts/tvheadend/superuser
-    cp ../conf/superuser $final_path/.hts/tvheadend/superuser
-    ynh_replace_string --match_string="__SUPERUSER__" --replace_string="$superuser" --target_file="$final_path/.hts/tvheadend/superuser"
-    ynh_replace_string --match_string="__PASSWORD__" --replace_string="$password" --target_file="$final_path/.hts/tvheadend/superuser"
-    ynh_store_file_checksum --file="$final_path/.hts/tvheadend/superuser"
+    ynh_add_config --template="superuser" --destination="${conf_dir}/superuser"
+    chown hts:video "${conf_dir}/superuser"
+    chmod 600 "${conf_dir}/superuser"
 
 fi
+
+
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
+ynh_script_progression --message="Upgrading NGINX web server configuration..." --weight=2
+
+# Create a dedicated NGINX config
+ynh_add_nginx_config
+
 
 #=================================================
 # SETUP SSOWAT

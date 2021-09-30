@@ -6,7 +6,7 @@
         "en": "TV streaming server and recorder",
         "fr": "Serveur de streaming et d'enregistrement TV"
     },
-    "version": "4.2.8-36~ynh5",
+    "version": "4.3.1979~ynh5",
     "url": "https://tvheadend.org",
     "license": "free",
     "maintainer": {
