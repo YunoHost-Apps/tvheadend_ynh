@@ -100,6 +100,11 @@ ynh_exec_quiet "wget -q -O $tvheadend_deb_dst $tvheadend_deb_url"
 #=================================================
 ynh_script_progression --message="Installing Tvheadend..." --weight=24
 
+# Pre-seed debconf database with answers of the interactive dpkg
+echo tvheadend tvheadend/admin_password password $password | debconf-set-selections
+echo tvheadend tvheadend/admin_username string $superuser | debconf-set-selections
+echo tvheadend tvheadend/last_notes note | debconf-set-selections
+
 ynh_exec_warn_less DEBIAN_FRONTEND=noninteractive dpkg -i $tvheadend_deb_dst
 
 ynh_secure_remove --file="$temp_folder"
@@ -124,12 +129,6 @@ then
 else
 	ynh_add_config --template="tvheadend" --destination="/etc/default/tvheadend"
 fi
-
-
-# Copy and modify /home/hts/.hts/tvheadend/superuser
-ynh_add_config --template="superuser" --destination="${conf_dir}/superuser"
-chown hts:video "${conf_dir}/superuser"
-chmod 600 "${conf_dir}/superuser"
 
 #=================================================
 # NGINX CONFIGURATION
