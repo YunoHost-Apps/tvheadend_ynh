@@ -114,12 +114,6 @@ then
     else
         ynh_add_config --template="tvheadend" --destination="/etc/default/tvheadend"
     fi
-
-    # Copy and modify /home/hts/.hts/tvheadend/superuser
-    ynh_add_config --template="superuser" --destination="${conf_dir}/superuser"
-    chown hts:video "${conf_dir}/superuser"
-    chmod 600 "${conf_dir}/superuser"
-
 fi
 
 
