@@ -128,6 +128,7 @@ ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
 yunohost service add $app --description="TV streaming server and recorder" --needs_exposed_ports $port $stream_port
 
+
 #=================================================
 # SETUP SSOWAT
 #=================================================
