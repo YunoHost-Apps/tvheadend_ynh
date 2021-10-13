@@ -50,7 +50,7 @@ ynh_abort_if_errors
 #=================================================
 ynh_script_progression --message="Stopping Tvheadend service..." --weight=3
 
-ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app.log"
+ynh_systemd_action --service_name=$app --action="stop"
 
 
 #=================================================
@@ -108,13 +108,12 @@ then
     ynh_script_progression --message="Restore/update configuration files..." --weight=1
 
     # Copy and modify /etc/default/tvheadend
-    ynh_add_config --template="tvheadend" --destination="/etc/default/tvheadend"
-
-    # Copy and modify /home/hts/.hts/tvheadend/superuser
-    ynh_add_config --template="superuser" --destination="${conf_dir}/superuser"
-    chown hts:video "${conf_dir}/superuser"
-    chmod 600 "${conf_dir}/superuser"
-
+    if [ "$path_url" = "/" ]
+    then
+        ynh_add_config --template="tvheadend_no_subpath" --destination="/etc/default/tvheadend"
+    else
+        ynh_add_config --template="tvheadend" --destination="/etc/default/tvheadend"
+    fi
 fi
 
 
@@ -128,11 +127,25 @@ ynh_add_nginx_config
 
 
 #=================================================
-# SETUP SSOWAT
+# ENSURE DOWNWARD COMPATIBILITY
 #=================================================
-ynh_script_progression --message="Configuring SSOwat..." --weight=1
+ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
+if ynh_legacy_permissions_exists; then
+    ynh_legacy_permissions_delete_all
 
-ynh_app_setting_set --app=$app --key=skipped_uris --value="/"
+    ynh_app_setting_delete --app=$app --key=is_public
+fi
+
+if ! ynh_permission_exists --permission="main"; then
+    # Create the required permissions
+    ynh_permission_create --permission="main" --allowed="visitors"
+fi
+
+#=================================================
+# INTEGRATE SERVICE IN YUNOHOST
+#=================================================
+ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
+yunohost service add $app --description="TV streaming server and recorder" --needs_exposed_ports $port $stream_port
 
 #=================================================
 # RELOAD NGINX
@@ -151,7 +164,7 @@ apt-mark hold tvheadend
 #=================================================
 ynh_script_progression --message="Starting Tvheadend service..." --weight=1
 
-ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$app.log"
+ynh_systemd_action --service_name=$app --action="start"
 
 #=================================================
 # END OF SCRIPT

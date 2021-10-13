@@ -58,18 +58,6 @@ then
     yunohost service remove $app
 fi
 
-#=================================================
-# REMOVE LOGROTATE CONFIGURATION
-#=================================================
-ynh_script_progression --message="Removing logrotate configuration..." --weight=1
-
-# Remove the app-specific logrotate config
-ynh_remove_logrotate
-
-ynh_script_progression --message="Removing $app log file..." --weight=1
-
-# Remove the log files
-ynh_secure_remove --file="/var/log/$app.log"
 
 #=================================================
 # REMOVE DEPENDENCIES
