@@ -100,6 +100,11 @@ ynh_exec_quiet "wget -q -O $tvheadend_deb_dst $tvheadend_deb_url"
 #=================================================
 ynh_script_progression --message="Installing Tvheadend..." --weight=24
 
+# Pre-seed debconf database with answers of the interactive dpkg
+echo tvheadend tvheadend/admin_password password $password | debconf-set-selections
+echo tvheadend tvheadend/admin_username string $superuser | debconf-set-selections
+echo tvheadend tvheadend/last_notes note | debconf-set-selections
+
 ynh_exec_warn_less DEBIAN_FRONTEND=noninteractive dpkg -i $tvheadend_deb_dst
 
 ynh_secure_remove --file="$temp_folder"
@@ -118,12 +123,11 @@ ynh_script_progression --message="Update configuration files..." --weight=1
 # Copy and modify /etc/default/tvheadend
 conf_dir=$final_path/.hts/tvheadend
 ynh_app_setting_set --app=$app --key=conf_dir --value=$conf_dir
-ynh_add_config --template="tvheadend" --destination="/etc/default/tvheadend"
-
-# Copy and modify /home/hts/.hts/tvheadend/superuser
-ynh_add_config --template="superuser" --destination="${conf_dir}/superuser"
-chown hts:video "${conf_dir}/superuser"
-chmod 600 "${conf_dir}/superuser"
+if [ "$path_url" = "/" ]
+then
+	ynh_add_config --template="tvheadend_no_subpath" --destination="/etc/default/tvheadend"
+else
+	ynh_add_config --template="tvheadend" --destination="/etc/default/tvheadend"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -134,27 +138,17 @@ ynh_script_progression --message="Configuring NGINX web server..." --weight=2
 ynh_add_nginx_config
 
 #=================================================
-# SETUP LOGROTATE
-#=================================================
-ynh_script_progression --message="Configuring log rotation..." --weight=1
-
-# Use logrotate to manage application logfile(s)
-touch /var/log/$app.log
-chmod 666 /var/log/$app.log
-ynh_use_logrotate --logfile=/var/log/$app.log
-
-#=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
-yunohost service add $app --description="TV streaming server and recorder" --log "/var/log/$app.log"
+yunohost service add $app --description="TV streaming server and recorder" --needs_exposed_ports $port $stream_port
 
 #=================================================
 # SETUP SSOWAT
 #=================================================
-ynh_script_progression --message="Configuring SSOwat..." --weight=1
+ynh_script_progression --message="Configuring permissions..." --weight=1
 
-ynh_app_setting_set --app=$app --key=skipped_uris --value="/"
+ynh_permission_update --permission="main" --add="visitors"
 
 #=================================================
 # RELOAD NGINX
@@ -175,7 +169,7 @@ apt-mark hold tvheadend
 #=================================================
 ynh_script_progression --message="Starting Tvheadend service..." --weight=1
 
-ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$app.log"
+ynh_systemd_action --service_name=$app --action="start"
 
 #=================================================
 # END OF SCRIPT
