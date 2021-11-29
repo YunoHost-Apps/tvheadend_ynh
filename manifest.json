@@ -20,7 +20,7 @@
         "email": "cecchetto.sylvain@me.com"
     },
     "requirements": {
-        "yunohost": ">= 4.1"
+        "yunohost": ">= 4.3.0"
     },
     "multi_instance": false,
     "services": [
