@@ -105,7 +105,7 @@ echo tvheadend tvheadend/admin_password password $password | debconf-set-selecti
 echo tvheadend tvheadend/admin_username string $superuser | debconf-set-selections
 echo tvheadend tvheadend/last_notes note | debconf-set-selections
 
-ynh_exec_warn_less DEBIAN_FRONTEND=noninteractive dpkg -i $tvheadend_deb_dst
+DEBIAN_FRONTEND=noninteractive ynh_exec_warn_less dpkg -i $tvheadend_deb_dst
 
 ynh_secure_remove --file="$temp_folder"
 
