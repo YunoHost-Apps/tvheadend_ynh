@@ -128,6 +128,7 @@ then
 	ynh_add_config --template="tvheadend_no_subpath" --destination="/etc/default/tvheadend"
 else
 	ynh_add_config --template="tvheadend" --destination="/etc/default/tvheadend"
+fi
 
 #=================================================
 # NGINX CONFIGURATION
