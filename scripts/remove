@@ -73,7 +73,8 @@ ynh_remove_app_dependencies
 ynh_script_progression --message="Removing Tvheadend main directory and config files..." --weight=2
 
 # Remove the app directory securely (/home/hts folder)
-ynh_secure_remove --file="$final_path"
+## Use rm -r because ynh_secure_remove says that /home/hts is not an acceptable path to delete
+rm -r $final_path
 ynh_secure_remove --file="/etc/default/tvheadend"
 
 #=================================================
