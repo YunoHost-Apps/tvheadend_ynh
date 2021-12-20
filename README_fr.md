@@ -13,7 +13,7 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 Serveur de streaming et d'enregistrement TV
 
-**Version incluse :** 4.3.1979~ynh8
+**Version incluse :** 4.3.1979~ynh9
 
 
 
