@@ -5,6 +5,7 @@
 #=================================================
 # IMPORT GENERIC HELPERS
 #=================================================
+
 source _common.sh
 source /usr/share/yunohost/helpers
 
@@ -27,6 +28,7 @@ stream_port=$(ynh_app_setting_get --app=$app --key=stream_port)
 #=================================================
 # CHECK VERSION
 #=================================================
+
 upgrade_type=$(ynh_check_app_version_changed)
 
 #=================================================
@@ -52,10 +54,26 @@ ynh_script_progression --message="Stopping Tvheadend service..." --weight=3
 
 ynh_systemd_action --service_name=$app --action="stop"
 
+#=================================================
+# ENSURE DOWNWARD COMPATIBILITY
+#=================================================
+ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
+
+if ynh_legacy_permissions_exists; then
+    ynh_legacy_permissions_delete_all
+
+    ynh_app_setting_delete --app=$app --key=is_public
+fi
+
+if ! ynh_permission_exists --permission="main"; then
+    # Create the required permissions
+    ynh_permission_create --permission="main" --allowed="visitors"
+fi
 
 #=================================================
 # UPGRADE TVHEADEND DEB PACKAGE
 #=================================================
+
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
     #=================================================
@@ -116,7 +134,6 @@ then
     fi
 fi
 
-
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
@@ -125,26 +142,11 @@ ynh_script_progression --message="Upgrading NGINX web server configuration..." -
 # Create a dedicated NGINX config
 ynh_add_nginx_config
 
-
-#=================================================
-# ENSURE DOWNWARD COMPATIBILITY
-#=================================================
-ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
-if ynh_legacy_permissions_exists; then
-    ynh_legacy_permissions_delete_all
-
-    ynh_app_setting_delete --app=$app --key=is_public
-fi
-
-if ! ynh_permission_exists --permission="main"; then
-    # Create the required permissions
-    ynh_permission_create --permission="main" --allowed="visitors"
-fi
-
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
+
 yunohost service add $app --description="TV streaming server and recorder" --needs_exposed_ports $port $stream_port
 
 #=================================================
@@ -157,6 +159,7 @@ ynh_systemd_action --service_name=nginx --action=reload
 #=================================================
 # PREVENT TVHEADEND BEING UPGRADED THROUGHT APT
 #=================================================
+
 apt-mark hold tvheadend
 
 #=================================================
@@ -169,4 +172,4 @@ ynh_systemd_action --service_name=$app --action="start"
 #=================================================
 # END OF SCRIPT
 #=================================================
-ynh_script_progression --message="Upgrade of Tvheadend completed, HTTP port is $port and HTSP port is $stream_port" --last
+ynh_script_progression --message="Upgrade of Tvheadend completed, HTSP port is $stream_port" --last
