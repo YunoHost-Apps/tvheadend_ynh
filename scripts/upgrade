@@ -103,7 +103,7 @@ then
         tvheadend_deb_url="$tvheadend_deb_x86"
     fi
 
-    ynh_exec_quiet "wget -q -O $tvheadend_deb_dst $tvheadend_deb_url"
+    ynh_exec_quiet wget -q -O $tvheadend_deb_dst $tvheadend_deb_url
 
     #=================================================
     # INSTALL TVHEADEND DEB PACKAGE
@@ -147,7 +147,7 @@ ynh_add_nginx_config
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
 
-yunohost service add $app --description="TV streaming server and recorder" --needs_exposed_ports $port $stream_port
+yunohost service add $app --description="TV streaming server and recorder" --needs_exposed_ports $stream_port
 
 #=================================================
 # RELOAD NGINX
