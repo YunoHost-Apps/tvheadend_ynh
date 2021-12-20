@@ -74,7 +74,7 @@ ynh_script_progression --message="Removing Tvheadend main directory and config f
 
 # Remove the app directory securely (/home/hts folder)
 ## Use rm -r because ynh_secure_remove says that /home/hts is not an acceptable path to delete
-rm -r $final_path
+ynh_secure_remove --file="$final_path"
 ynh_secure_remove --file="/etc/default/tvheadend"
 
 #=================================================
@@ -88,11 +88,6 @@ ynh_remove_nginx_config
 #=================================================
 # CLOSE PORTS
 #=================================================
-if yunohost firewall list | grep -q "\- $port$"
-then
-    ynh_script_progression --message="Closing port $port..." --weight=8
-    ynh_exec_warn_less yunohost firewall disallow TCP $port
-fi
 
 if yunohost firewall list | grep -q "\- $stream_port$"
 then

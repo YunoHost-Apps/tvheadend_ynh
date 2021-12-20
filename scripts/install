@@ -11,12 +11,14 @@ source /usr/share/yunohost/helpers
 #=================================================
 # MANAGE SCRIPT FAILURE
 #=================================================
+
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
 #=================================================
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
+
 domain=$YNH_APP_ARG_DOMAIN
 path_url=$YNH_APP_ARG_PATH
 superuser=$YNH_APP_ARG_SUPERUSER
@@ -62,9 +64,8 @@ ynh_app_setting_set --app=$app --key=stream_port --value=$stream_port
 
 # Open ports
 ynh_script_progression --message="Configuring firewall..." --weight=15
-ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
-ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $stream_port
 
+ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $stream_port
 
 #=================================================
 # INSTALL DEPENDENCIES
@@ -142,7 +143,7 @@ ynh_add_nginx_config
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
-yunohost service add $app --description="TV streaming server and recorder" --needs_exposed_ports $port $stream_port
+yunohost service add $app --description="TV streaming server and recorder" --needs_exposed_ports $stream_port
 
 #=================================================
 # SETUP SSOWAT
@@ -175,4 +176,4 @@ ynh_systemd_action --service_name=$app --action="start"
 #=================================================
 # END OF SCRIPT
 #=================================================
-ynh_script_progression --message="Installation of Tvheadend completed, HTTP port is $port and HTSP port is $stream_port" --last
+ynh_script_progression --message="Installation of Tvheadend completed, HTSP port is $stream_port" --last
