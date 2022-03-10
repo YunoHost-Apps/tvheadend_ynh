@@ -5,12 +5,14 @@
 #=================================================
 # IMPORT GENERIC HELPERS
 #=================================================
+
 source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
 # RETRIEVE ARGUMENTS
 #=================================================
+
 old_domain=$YNH_APP_OLD_DOMAIN
 old_path=$YNH_APP_OLD_PATH
 
@@ -24,7 +26,9 @@ app=$YNH_APP_INSTANCE_NAME
 #=================================================
 ynh_script_progression --message="Loading installation settings..." --weight=1
 
+# Needed for helper "ynh_add_nginx_config"
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+
 conf_dir=$(ynh_app_setting_get --app=$app --key=conf_dir)
 port=$(ynh_app_setting_get --app=$app --key=port)
 stream_port=$(ynh_app_setting_get --app=$app --key=stream_port)
@@ -37,6 +41,7 @@ ynh_script_progression --message="Backing up the app before changing its URL (ma
 # Backup the current version of the app
 ynh_backup_before_upgrade
 ynh_clean_setup () {
+	ynh_clean_check_starting
     # Remove the new domain config file, the remove script won't do it as it doesn't know yet its location.
     ynh_secure_remove --file="/etc/nginx/conf.d/$new_domain.d/$app.conf"
 
@@ -65,9 +70,9 @@ fi
 #=================================================
 # STANDARD MODIFICATIONS
 #=================================================
-# STOP TVHEADEND SERVICE
+# STOP SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Stopping Tvheadend service..." --weight=1
+ynh_script_progression --message="Stopping a systemd service..." --weight=1
 
 ynh_systemd_action --service_name=$app --action="stop"
 
@@ -109,9 +114,34 @@ then
     ynh_store_file_checksum --file="/etc/nginx/conf.d/$new_domain.d/$app.conf"
 fi
 
+#=================================================
+# SPECIFIC MODIFICATIONS
+#=================================================
+# ...
+#=================================================
+
+# Update Tvheadend configuration file
+if [ $change_path -eq 1 ]
+then
+    ynh_script_progression --message="Updating Tvheadend configuration..." --weight=1
+    if [ "$path_url" = "/" ]
+    then
+        ynh_add_config --template="tvheadend_no_subpath" --destination="/etc/default/tvheadend"
+    else
+        ynh_add_config --template="tvheadend" --destination="/etc/default/tvheadend"
+    fi
+fi
 
 #=================================================
 # GENERIC FINALISATION
+#=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_script_progression --message="Starting a systemd service..." --weight=1
+
+# Start a systemd service
+ynh_systemd_action --service_name=$app --action="start"
+
 #=================================================
 # RELOAD NGINX
 #=================================================
@@ -120,13 +150,7 @@ ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
-# START TVHEADEND SERVICE
-#=================================================
-ynh_script_progression --message="Starting $app service..." --weight=1
-
-ynh_systemd_action --service_name=$app --action="start"
-
-#=================================================
 # END OF SCRIPT
 #=================================================
-ynh_script_progression --message="Change of URL completed for Tvheadend" --last
+
+ynh_script_progression --message="Change of URL completed for $app" --last

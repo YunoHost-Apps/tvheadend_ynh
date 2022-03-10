@@ -6,6 +6,7 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
+# Keep this path for calling _common.sh inside the execution's context of backup and restore scripts
 source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
@@ -13,6 +14,10 @@ source /usr/share/yunohost/helpers
 # MANAGE SCRIPT FAILURE
 #=================================================
 
+ynh_clean_setup () {
+	true
+}
+# Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
 #=================================================
@@ -22,14 +27,8 @@ ynh_print_info --message="Loading installation settings..."
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-path_url=$(ynh_app_setting_get --app=$app --key=path)
-superuser=$(ynh_app_setting_get --app=$app --key=superuser)
-password=$(ynh_app_setting_get --app=$app --key=password)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-conf_dir=$(ynh_app_setting_get --app=$app --key=conf_dir)
-port=$(ynh_app_setting_get --app=$app --key=port)
-stream_port=$(ynh_app_setting_get --app=$app --key=stream_port)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
 
 #=================================================
 # DECLARE DATA AND CONF FILES TO BACKUP
@@ -37,10 +36,9 @@ stream_port=$(ynh_app_setting_get --app=$app --key=stream_port)
 ynh_print_info --message="Declaring files to be backed up..."
 
 #=================================================
-# BACKUP THE APP MAIN DIR AND CONFIG FILES
+# BACKUP THE APP MAIN DIR
 #=================================================
 
-ynh_backup --src_path="/etc/default/tvheadend"
 ynh_backup --src_path="$final_path"
 
 #=================================================
@@ -50,6 +48,13 @@ ynh_backup --src_path="$final_path"
 ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 
 #=================================================
+# BACKUP VARIOUS FILES
+#=================================================
+
+ynh_backup --src_path="/etc/default/tvheadend"
+
+#=================================================
 # END OF SCRIPT
 #=================================================
-ynh_print_info  --message="Backup script completed for Tvheadend. (YunoHost will then actually copy those files to the archive)."
+
+ynh_print_info --message="Backup script completed for $app. (YunoHost will then actually copy those files to the archive)."
