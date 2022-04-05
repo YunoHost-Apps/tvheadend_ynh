@@ -6,7 +6,7 @@
         "en": "TV streaming server and recorder",
         "fr": "Serveur de streaming et d'enregistrement TV"
     },
-    "version": "4.3.2009~ynh9",
+    "version": "4.3.2009~ynh10",
     "url": "https://tvheadend.org",
     "upstream": {
         "license": "GPL-3.0",
