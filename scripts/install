@@ -45,7 +45,7 @@ ynh_script_progression --message="Adding system configurations related to $app..
 # Create a dedicated NGINX config
 ynh_add_nginx_config
 
-yunohost service add "$app" --description="TV streaming server and recorder" --needs_exposed_ports $stream_port
+yunohost service add "$app" --description="TV streaming server and recorder" --needs_exposed_ports $port_stream
 
 #=================================================
 # START SYSTEMD SERVICE
@@ -59,4 +59,4 @@ ynh_systemd_action --service_name="$app" --action="start"
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Installation of $app completed, HTSP port is $stream_port" --last
+ynh_script_progression --message="Installation of $app completed, HTSP port is $port_stream" --last
