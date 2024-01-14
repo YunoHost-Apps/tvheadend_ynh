@@ -7,7 +7,7 @@ name = "Tvheadend"
 description.en = "TV streaming server and recorder"
 description.fr = "Serveur de streaming et d'enregistrement TV"
 
-version = "4.3.2009~ynh10"
+version = "4.3.2009~ynh11"
 
 maintainers = ["Sylvain Cecchetto"]
 
@@ -18,7 +18,7 @@ userdoc = "https://tvheadend.org/projects/tvheadend/wiki"
 code = "https://github.com/tvheadend/tvheadend"
 
 [integration]
-yunohost = ">= 4.3.0"
+yunohost = ">= 11.2"
 architectures = ["amd64", "armhf"]
 multi_instance = false
 ldap = "not_relevant"
