@@ -18,7 +18,7 @@ Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) po
 
 Serveur de streaming et d'enregistrement TV
 
-**Version incluse :** 4.3.2009~ynh10
+**Version incluse :** 4.3.2009~ynh11
 
 ## Captures d’écran
 
