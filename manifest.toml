@@ -35,6 +35,10 @@ ram.runtime = "50M" # FIXME: replace with an **estimate** minimum ram requiremen
     type = "path"
     default = "/tvh"
 
+    [install.init_main_permission]
+    type = "group"
+    default = "visitors"
+
     [install.superuser]
     ask.en = "Choose the superuser name in order to login on Tvheadend"
     ask.fr = "Choisissez le nom du superutilisateur pour la connexion à Tvheadend"

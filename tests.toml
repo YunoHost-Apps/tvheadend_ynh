@@ -6,4 +6,6 @@ test_format = 1.0
     # Tests to run
     # ------------
 
+    args.superuser = "package_checker"
+
     test_upgrade_from.e82643952e5567db826790e1e4a353559f66f112.name = "4.3.1979~ynh9"
