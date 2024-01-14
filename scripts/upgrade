@@ -10,162 +10,64 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# LOAD SETTINGS
-#=================================================
-ynh_script_progression --message="Loading installation settings..." --weight=2
-
-app=$YNH_APP_INSTANCE_NAME
-
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-path_url=$(ynh_app_setting_get --app=$app --key=path)
-superuser=$(ynh_app_setting_get --app=$app --key=superuser)
-password=$(ynh_app_setting_get --app=$app --key=password)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-conf_dir=$(ynh_app_setting_get --app=$app --key=conf_dir)
-port=$(ynh_app_setting_get --app=$app --key=port)
-stream_port=$(ynh_app_setting_get --app=$app --key=stream_port)
-
-#=================================================
-# CHECK VERSION
-#=================================================
-ynh_script_progression --message="Checking version..."
-
-upgrade_type=$(ynh_check_app_version_changed)
-
-#=================================================
-# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
-#=================================================
-ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=4
-
-# Backup the current version of the app
-ynh_backup_before_upgrade
-ynh_clean_setup () {
-	ynh_clean_check_starting
-	# Restore it if the upgrade fails
-    ynh_restore_upgradebackup
-}
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
-
-#=================================================
 # STANDARD UPGRADE STEPS
 #=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
 ynh_script_progression --message="Stopping a systemd service..." --weight=3
 
-ynh_systemd_action --service_name=$app --action="stop"
+ynh_systemd_action --service_name="$app" --action="stop"
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
-ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
+# ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
 
-# Cleaning legacy permissions
-if ynh_legacy_permissions_exists; then
-    ynh_legacy_permissions_delete_all
+#=================================================
+# DOWNLOAD, CHECK AND UNPACK SOURCE
+#=================================================
+ynh_script_progression --message="Downloading and installing $app package..." --weight=1
 
-    ynh_app_setting_delete --app=$app --key=is_public
+chown -R "$app:www-data" "$install_dir"
+
+_install_tvheadend_package
+# The deb install automatically create the hts system user
+
+# Tvheadend automatically start after install
+# we stop it before the configuration
+ynh_systemd_action --service_name="$app" --action="stop"
+
+#=================================================
+# MODIFY TVHEADEND CONFIG FILES
+#=================================================
+ynh_script_progression --message="Update configuration files..." --weight=1
+
+# Copy and modify /etc/default/tvheadend
+conf_dir=$install_dir/.hts/tvheadend
+ynh_app_setting_set --app="$app" --key=conf_dir --value="$conf_dir"
+if [ "$path" = "/" ]; then
+    ynh_add_config --template="tvheadend_no_subpath" --destination="/etc/default/tvheadend"
+else
+    ynh_add_config --template="tvheadend" --destination="/etc/default/tvheadend"
 fi
 
 #=================================================
-# NGINX CONFIGURATION
+# REAPPLY SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression --message="Upgrading NGINX web server configuration..." --weight=2
+ynh_script_progression --message="Upgrading system configurations related to $app..." --weight=1
 
 # Create a dedicated NGINX config
 ynh_add_nginx_config
 
-#=================================================
-# UPGRADE TVHEADEND DEB PACKAGE
-#=================================================
-
-if [ "$upgrade_type" == "UPGRADE_APP" ]
-then
-    #=================================================
-    # UPGRADE DEPENDENCIES
-    #=================================================
-    ynh_script_progression --message="Upgrading dependencies..." --weight=15
-
-    if [ -n "$(uname -m | grep arm)" ]
-    then
-        ynh_install_app_dependencies $pkg_dependencies_rb
-    else
-        ynh_install_app_dependencies $pkg_dependencies_x86
-    fi
-
-    #=================================================
-    # DOWNLOAD TVHEADEND DEB PACKAGE
-    #=================================================
-    ynh_script_progression --message="Downloading Tvheadend..." --weight=5
-
-    temp_folder="$(mktemp -d)"
-    tvheadend_deb_dst="$temp_folder/tvheadend_deb.deb"
-
-    if [ -n "$(uname -m | grep arm)" ]
-    then
-        tvheadend_deb_url="$tvheadend_deb_arm"
-    else
-        tvheadend_deb_url="$tvheadend_deb_x86"
-    fi
-
-    ynh_exec_quiet wget -q -O $tvheadend_deb_dst $tvheadend_deb_url
-
-    #=================================================
-    # INSTALL TVHEADEND DEB PACKAGE
-    #=================================================
-    ynh_script_progression --message="Upgrading Tvheadend..." --weight=24
-
-    DEBIAN_FRONTEND=noninteractive ynh_exec_warn_less dpkg --force-confold -i $tvheadend_deb_dst
-
-    ynh_secure_remove --file="$temp_folder"
-
-    # The deb install automatically create the hts system user
-
-    # Tvheadend automatically start after install
-    # we stop it before the configuration
-    ynh_systemd_action --service_name=$app --action="stop"
-
-    #=================================================
-    # RESTORE TVHEADEND CONFIG FILES
-    #=================================================
-    ynh_script_progression --message="Restore/update configuration files..." --weight=1
-
-    # Copy and modify /etc/default/tvheadend
-    if [ "$path_url" = "/" ]
-    then
-        ynh_add_config --template="tvheadend_no_subpath" --destination="/etc/default/tvheadend"
-    else
-        ynh_add_config --template="tvheadend" --destination="/etc/default/tvheadend"
-    fi
-fi
-
-#=================================================
-# PREVENT TVHEADEND BEING UPGRADED THROUGHT APT
-#=================================================
-
-apt-mark hold tvheadend
-
-#=================================================
-# INTEGRATE SERVICE IN YUNOHOST
-#=================================================
-ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
-
-yunohost service add $app --description="TV streaming server and recorder" --needs_exposed_ports $stream_port
+yunohost service add "$app" --description="TV streaming server and recorder" --needs_exposed_ports $stream_port
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression --message="Starting a systemd service..." --weight=1
 
-ynh_systemd_action --service_name=$app --action="start"
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-ynh_script_progression --message="Reloading NGINX web server..." --weight=1
-
-ynh_systemd_action --service_name=nginx --action=reload
+# Start a systemd service
+ynh_systemd_action --service_name="$app" --action="start"
 
 #=================================================
 # END OF SCRIPT

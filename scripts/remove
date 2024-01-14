@@ -10,28 +10,13 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# LOAD SETTINGS
-#=================================================
-ynh_script_progression --message="Loading installation settings..." --weight=1
-
-app=$YNH_APP_INSTANCE_NAME
-
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-port=$(ynh_app_setting_get --app=$app --key=port)
-stream_port=$(ynh_app_setting_get --app=$app --key=stream_port)
-superuser=$(ynh_app_setting_get --app=$app --key=superuser)
-password=$(ynh_app_setting_get --app=$app --key=password)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-
-#=================================================
 # STANDARD REMOVE
 #=================================================
 # REMOVE SERVICE INTEGRATION IN YUNOHOST
 #=================================================
 
 # Remove the service from the list of services known by YunoHost (added from `yunohost service add`)
-if ynh_exec_warn_less yunohost service status $app >/dev/null
-then
+if ynh_exec_warn_less yunohost service status $app >/dev/null; then
     ynh_script_progression --message="Removing $app service integration..." --weight=1
     yunohost service remove $app
 fi
@@ -41,66 +26,26 @@ fi
 #=================================================
 ynh_script_progression --message="Stopping Tvheadend service..." --weight=2
 
-ynh_systemd_action --service_name=$app --action=stop
-ynh_exec_quiet systemctl disable $app --quiet
+ynh_systemd_action --service_name="$app" --action=stop
+ynh_exec_quiet systemctl disable "$app" --quiet
 ynh_exec_quiet systemctl daemon-reload
 
 #=================================================
 # UNHOLD TVHEADEND FROM APT
 #=================================================
-ynh_script_progression --message="Disable prevent Tvheadend being upgraded throught APT..." --weight=2
+ynh_script_progression --message="Removing the $app apt package..." --weight=2
 
-apt-mark unhold tvheadend
-
-#=================================================
-# REMOVE TVHEADEND
-#=================================================
-ynh_script_progression --message="Removing Tvheadend..." --weight=6
-
-ynh_package_autopurge $app
+_uninstall_tvheadend_package
 
 #=================================================
-# REMOVE NGINX CONFIGURATION
+# REMOVE SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression --message="Removing NGINX web server configuration..." --weight=1
+ynh_script_progression --message="Removing system configurations related to $app..." --weight=1
 
 # Remove the dedicated NGINX config
 ynh_remove_nginx_config
 
-#=================================================
-# REMOVE DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Removing dependencies..." --weight=3
-
-# Remove metapackage and its dependencies
-ynh_remove_app_dependencies
-
-#=================================================
-# CLOSE A PORT
-#=================================================
-
-if yunohost firewall list | grep -q "\- $stream_port$"
-then
-    ynh_script_progression --message="Closing port $stream_port..." --weight=8
-    ynh_exec_warn_less yunohost firewall disallow TCP $stream_port
-fi
-
-#=================================================
-# SPECIFIC REMOVE
-#=================================================
-# REMOVE VARIOUS FILES
-#=================================================
-ynh_script_progression --message="Removing various files..."
-
 ynh_secure_remove --file="/etc/default/tvheadend"
-
-#=================================================
-# REMOVE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Removing the dedicated system user..." --weight=1
-
-# Delete a system user
-deluser  hts --remove-home
 
 #=================================================
 # END OF SCRIPT
