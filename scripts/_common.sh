@@ -5,7 +5,8 @@
 #=================================================
 
 debian=$(lsb_release --codename --short)
-pkg_version="4.3-2192"
+pkg_version_bullseye="4.3-2192~gc9b38a81a~bullseye"
+pkg_version_bookworm="4.3-2098~g44bf691ac~bookworm"
 
 #=================================================
 # PERSONAL HELPERS
