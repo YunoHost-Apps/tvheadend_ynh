@@ -29,7 +29,7 @@ TV streaming server and recorder
 * Official app website: <https://tvheadend.org>
 * Official user documentation: <https://tvheadend.org/projects/tvheadend/wiki>
 * Upstream app code repository: <https://github.com/tvheadend/tvheadend>
-* YunoHost documentation for this app: <https://yunohost.org/app_tvheadend>
+* YunoHost Store: <https://apps.yunohost.org/app/tvheadend>
 * Report a bug: <https://github.com/YunoHost-Apps/tvheadend_ynh/issues>
 
 ## Developer info
