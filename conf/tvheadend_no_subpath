@@ -3,7 +3,7 @@
 
 # systemd
 # See tvheadend --help for more - default "-u hts -g video"
-OPTIONS="-u hts -g video -c __CONF_DIR__ --http_port __PORT__ --htsp_port __STREAM_PORT__"
+OPTIONS="-u hts -g video -c __CONF_DIR__ --http_port __PORT__ --htsp_port __PORT_STREAM__"
 
 # sysvinit
 #
@@ -58,4 +58,3 @@ TVH_DEBUG=0
 # TVH_ARGS
 #   add any other arguments
 TVH_ARGS=""
-
