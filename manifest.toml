@@ -81,8 +81,6 @@ ram.runtime = "50M" # FIXME: replace with an **estimate** minimum ram requiremen
 
     [resources.data_dir]
     dir = "/var/lib/tvheadend"
-    owner = "hts:rwX"
-    group = "video:r--"
 
     [resources.permissions]
     main.url = "/"

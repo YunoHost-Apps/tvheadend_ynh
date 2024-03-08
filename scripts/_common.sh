@@ -30,6 +30,8 @@ _install_tvheadend_package() {
     ynh_package_install \
         "$install_dir/tvheadend.deb"
 
+    chown -R "hts:video" "$data_dir"
+
     # The doc says it should be called only once,
     # but the code says multiple calls are supported.
     # Also, they're already installed so that should be quasi instantaneous.
