@@ -79,8 +79,12 @@ ram.runtime = "50M" # FIXME: replace with an **estimate** minimum ram requiremen
 
     [resources.install_dir]
 
+    [resources.data_dir]
+    dir = "/var/lib/tvheadend"
+
     [resources.permissions]
     main.url = "/"
+    main.auth_header = false
 
     [resources.ports]
     main.default = 9981
