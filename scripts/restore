@@ -20,15 +20,6 @@ ynh_restore_file --origin_path="$install_dir"
 chown -R "$app:www-data" "$install_dir"
 
 #=================================================
-# RESTORE THE DATA DIRECTORY
-#=================================================
-ynh_script_progression --message="Restoring the data directory..." --weight=1
-
-ynh_restore_file --origin_path="$data_dir" --not_mandatory
-
-chown -R "hts:video" "$data_dir"
-
-#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression --message="Reinstalling $app package..." --weight=1
@@ -39,6 +30,15 @@ _install_tvheadend_package
 # Tvheadend automatically start after install
 # we stop it before the configuration
 ynh_systemd_action --service_name="$app" --action="stop"
+
+#=================================================
+# RESTORE THE DATA DIRECTORY
+#=================================================
+ynh_script_progression --message="Restoring the data directory..." --weight=1
+
+ynh_restore_file --origin_path="$data_dir" --not_mandatory
+
+chown -R "hts:video" "$data_dir"
 
 #=================================================
 # RESTORE TVHEADEND CONFIG FILES
