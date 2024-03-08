@@ -17,7 +17,6 @@ Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) po
 ## Vue d’ensemble
 
 Serveur de streaming et d'enregistrement TV
-
 **Version incluse :** 4.3.2009~ynh11
 
 ## Captures d’écran
@@ -26,11 +25,11 @@ Serveur de streaming et d'enregistrement TV
 
 ## Documentations et ressources
 
-* Site officiel de l’app : <https://tvheadend.org>
-* Documentation officielle utilisateur : <https://tvheadend.org/projects/tvheadend/wiki>
-* Dépôt de code officiel de l’app : <https://github.com/tvheadend/tvheadend>
-* YunoHost Store: <https://apps.yunohost.org/app/tvheadend>
-* Signaler un bug : <https://github.com/YunoHost-Apps/tvheadend_ynh/issues>
+- Site officiel de l’app : <https://tvheadend.org>
+- Documentation officielle utilisateur : <https://tvheadend.org/projects/tvheadend/wiki>
+- Dépôt de code officiel de l’app : <https://github.com/tvheadend/tvheadend>
+- YunoHost Store : <https://apps.yunohost.org/app/tvheadend>
+- Signaler un bug : <https://github.com/YunoHost-Apps/tvheadend_ynh/issues>
 
 ## Informations pour les développeurs
 

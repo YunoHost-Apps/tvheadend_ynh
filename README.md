@@ -17,7 +17,6 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 ## Overview
 
 TV streaming server and recorder
-
 **Shipped version:** 4.3.2009~ynh11
 
 ## Screenshots
@@ -26,11 +25,11 @@ TV streaming server and recorder
 
 ## Documentation and resources
 
-* Official app website: <https://tvheadend.org>
-* Official user documentation: <https://tvheadend.org/projects/tvheadend/wiki>
-* Upstream app code repository: <https://github.com/tvheadend/tvheadend>
-* YunoHost Store: <https://apps.yunohost.org/app/tvheadend>
-* Report a bug: <https://github.com/YunoHost-Apps/tvheadend_ynh/issues>
+- Official app website: <https://tvheadend.org>
+- Official user documentation: <https://tvheadend.org/projects/tvheadend/wiki>
+- Upstream app code repository: <https://github.com/tvheadend/tvheadend>
+- YunoHost Store: <https://apps.yunohost.org/app/tvheadend>
+- Report a bug: <https://github.com/YunoHost-Apps/tvheadend_ynh/issues>
 
 ## Developer info
 
