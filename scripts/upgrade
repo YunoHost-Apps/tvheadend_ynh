@@ -35,7 +35,7 @@ fi
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression --message="Downloading and installing $app package..." --weight=1
+ynh_script_progression --message="Installing $app package..." --weight=1
 
 chown -R "$app:www-data" "$install_dir"
 
