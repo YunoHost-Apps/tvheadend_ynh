@@ -19,7 +19,7 @@ code = "https://github.com/tvheadend/tvheadend"
 
 [integration]
 yunohost = ">= 11.2"
-architectures = ["amd64", "armhf"]
+architectures = ["amd64", "arm64", "armhf"]
 multi_instance = false
 ldap = "not_relevant"
 sso = "not_relevant"
@@ -52,10 +52,10 @@ ram.runtime = "50M" # FIXME: replace with an **estimate** minimum ram requiremen
     [resources.sources.main_bullseye]
     amd64.url = "https://dl.cloudsmith.io/public/tvheadend/tvheadend/deb/debian/pool/bullseye/main/t/tv/tvheadend_4.3-2192~gc9b38a81a~bullseye/tvheadend_4.3-2192~gc9b38a81a~bullseye_amd64.deb"
     amd64.sha256 = "e8f027620c5af52a805809ff6b42ee321db775f92fb161a6e5875f936f577782"
-    armhf.url = "https://dl.cloudsmith.io/public/tvheadend/tvheadend/deb/debian/pool/bullseye/main/t/tv/tvheadend_4.3-2192~gc9b38a81a~bullseye/tvheadend_4.3-2192~gc9b38a81a~bullseye_armhf.deb"
-    armhf.sha256 = "2b34f372c6272e47880555dd67a1aba23b0410d4b69d5aee41483829bcb3ef89"
     arm64.url = "https://dl.cloudsmith.io/public/tvheadend/tvheadend/deb/debian/pool/bullseye/main/t/tv/tvheadend_4.3-2192~gc9b38a81a~bullseye/tvheadend_4.3-2192~gc9b38a81a~bullseye_arm64.deb"
     arm64.sha256 = "f672912eb67fe3ac9d469c55d87ce2dde097d441413c862eef758e49b140c5a8"
+    armhf.url = "https://dl.cloudsmith.io/public/tvheadend/tvheadend/deb/debian/pool/bullseye/main/t/tv/tvheadend_4.3-2192~gc9b38a81a~bullseye/tvheadend_4.3-2192~gc9b38a81a~bullseye_armhf.deb"
+    armhf.sha256 = "2b34f372c6272e47880555dd67a1aba23b0410d4b69d5aee41483829bcb3ef89"
     rename = "tvheadend.deb"
 
     format = "whatever"
