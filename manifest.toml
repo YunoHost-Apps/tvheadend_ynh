@@ -62,7 +62,9 @@ ram.runtime = "50M" # FIXME: replace with an **estimate** minimum ram requiremen
     extract = false
     prefetch = false
     autoupdate.strategy = "latest_github_tag"
-    autoupdate.asset = "tarball"
+    autoupdate.asset.amd64 = "tarball"
+    autoupdate.asset.arm64 = "tarball"
+    autoupdate.asset.armhf = "tarball"
 
     [resources.sources.main_bookworm]
     amd64.url = "https://dl.cloudsmith.io/public/tvheadend/tvheadend/deb/debian/pool/bookworm/main/t/tv/tvheadend_4.3-2098~g44bf691ac~bookworm/tvheadend_4.3-2098~g44bf691ac~bookworm_amd64.deb"
