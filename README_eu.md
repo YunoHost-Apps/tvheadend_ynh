@@ -18,7 +18,7 @@ EZ editatu eskuz.
 
 
 
-**Paketatutako bertsioa:** 4.3.2009~ynh11
+**Paketatutako bertsioa:** 4.3.2323~ynh1
 
 ## Pantaila-argazkiak
 

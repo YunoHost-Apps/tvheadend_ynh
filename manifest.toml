@@ -7,7 +7,7 @@ name = "Tvheadend"
 description.en = "TV streaming server and recorder"
 description.fr = "Serveur de streaming et d'enregistrement TV"
 
-version = "4.3.2009~ynh11"
+version = "4.3.2323~ynh1"
 
 maintainers = ["Sylvain Cecchetto"]
 
@@ -50,14 +50,15 @@ ram.runtime = "50M" # FIXME: replace with an **estimate** minimum ram requiremen
 
 [resources]
     [resources.sources.main_bullseye]
-    amd64.url = "https://dl.cloudsmith.io/public/tvheadend/tvheadend/deb/debian/pool/bullseye/main/t/tv/tvheadend_4.3-2192~gc9b38a81a~bullseye/tvheadend_4.3-2192~gc9b38a81a~bullseye_amd64.deb"
-    amd64.sha256 = "e8f027620c5af52a805809ff6b42ee321db775f92fb161a6e5875f936f577782"
-    arm64.url = "https://dl.cloudsmith.io/public/tvheadend/tvheadend/deb/debian/pool/bullseye/main/t/tv/tvheadend_4.3-2192~gc9b38a81a~bullseye/tvheadend_4.3-2192~gc9b38a81a~bullseye_arm64.deb"
-    arm64.sha256 = "f672912eb67fe3ac9d469c55d87ce2dde097d441413c862eef758e49b140c5a8"
-    armhf.url = "https://dl.cloudsmith.io/public/tvheadend/tvheadend/deb/debian/pool/bullseye/main/t/tv/tvheadend_4.3-2192~gc9b38a81a~bullseye/tvheadend_4.3-2192~gc9b38a81a~bullseye_armhf.deb"
-    armhf.sha256 = "2b34f372c6272e47880555dd67a1aba23b0410d4b69d5aee41483829bcb3ef89"
-    rename = "tvheadend.deb"
+    
+    amd64.url = "https://dl.cloudsmith.io/public/tvheadend/tvheadend/deb/debian/pool/bullseye/main/t/tv/tvheadend_4.3-2323~g73a6bd00d~bullseye/tvheadend_4.3-2323~g73a6bd00d~bullseye_amd64.deb"
+    amd64.sha256 = "71f4ee6ad921bbb41b77964b3022f6bb1463d32ca9d0cd401a446c029fa6651a"
+    arm64.url = "https://dl.cloudsmith.io/public/tvheadend/tvheadend/deb/debian/pool/bullseye/main/t/tv/tvheadend_4.3-2192~gc9b38a81a~bullseye/tvheadend_4.3-2323~g73a6bd00d~bullseye_arm64.deb"
+    arm64.sha256 = "cfc808ff03c1b2eb4fc7486fa7c1c5bd7b789f1d5d110a75cc8ef9b47b013004"
+    armhf.url = "https://dl.cloudsmith.io/public/tvheadend/tvheadend/deb/debian/pool/bullseye/main/t/tv/tvheadend_4.3-2192~gc9b38a81a~bullseye/tvheadend_4.3-2323~g73a6bd00d~bullseye_armhf.deb"
+    armhf.sha256 = "48b75586c8117a46ef2cabbeb5b4b3e018b716c159851ad617ace1b9cabfdc91"
 
+    rename = "tvheadend.deb"
     format = "whatever"
     extract = false
     prefetch = false
@@ -67,10 +68,11 @@ ram.runtime = "50M" # FIXME: replace with an **estimate** minimum ram requiremen
     autoupdate.asset.armhf = "tarball"
 
     [resources.sources.main_bookworm]
-    amd64.url = "https://dl.cloudsmith.io/public/tvheadend/tvheadend/deb/debian/pool/bookworm/main/t/tv/tvheadend_4.3-2098~g44bf691ac~bookworm/tvheadend_4.3-2098~g44bf691ac~bookworm_amd64.deb"
-    amd64.sha256 = "18a95b1d9c0556590a3089f48cf95d851069eaaba2f4066ea52da2b9d27f5920"
-    rename = "tvheadend.deb"
+    amd64.url = "https://dl.cloudsmith.io/public/tvheadend/tvheadend/deb/debian/pool/bookworm/main/t/tv/tvheadend_4.3-2323~g73a6bd00d~bookworm/tvheadend_4.3-2323~g73a6bd00d~bookworm_amd64.deb"
+    amd64.sha256 = "656e0883952f3b797008133083c322e135c3ba0fc0d2d60dc14c6955f892f574"
+    # Upstream has no arm64 / armhf build for bookworm ? :|
 
+    rename = "tvheadend.deb"
     format = "whatever"
     extract = false
     prefetch = false
@@ -92,18 +94,3 @@ ram.runtime = "50M" # FIXME: replace with an **estimate** minimum ram requiremen
     main.default = 9981
     stream.default = 9982
     stream.exposed = "TCP"
-
-    [resources.apt]
-    packages = [
-        "libavahi-client3",
-        "libavahi-common3",
-        "libc6",
-        "libdbus-1-3",
-        "libdvbcsa1",
-        "libpcre3",
-        "libssl1.1",
-        "libstdc++6",
-        "liburiparser1",
-        "zlib1g",
-        "bzip2",
-    ]
