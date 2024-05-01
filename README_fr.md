@@ -18,7 +18,7 @@ Il NE doit PAS être modifié à la main.
 
 Serveur de streaming et d'enregistrement TV
 
-**Version incluse :** 4.3.2009~ynh11
+**Version incluse :** 4.3.2323~ynh1
 
 ## Captures d’écran
 

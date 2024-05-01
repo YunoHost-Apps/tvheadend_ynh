@@ -18,7 +18,7 @@ It shall NOT be edited by hand.
 
 TV streaming server and recorder
 
-**Shipped version:** 4.3.2009~ynh11
+**Shipped version:** 4.3.2323~ynh1
 
 ## Screenshots
 
