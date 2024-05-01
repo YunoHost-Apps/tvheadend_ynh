@@ -3,7 +3,7 @@
 _install_tvheadend_package() {
     # Download the package
     if [ ! -f "$install_dir/tvheadend.deb" ]; then
-        ynh_setup_source --dest_dir="$install_dir" --source_id="main_$YNH_DEBIAN"
+        ynh_setup_source --dest_dir="$install_dir" --source_id="main_$YNH_DEBIAN_VERSION"
     fi
 
     # Pre-seed debconf database with answers of the interactive dpkg
