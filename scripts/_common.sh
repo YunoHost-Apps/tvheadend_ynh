@@ -12,7 +12,7 @@ _install_tvheadend_package() {
     echo tvheadend tvheadend/last_notes note | debconf-set-selections
 
     # Install the package
-    ynh_package_install \
+    _ynh_apt_install \
         "$install_dir/tvheadend.deb"
 
     chown -R "hts:video" "$data_dir"
@@ -27,7 +27,7 @@ _install_tvheadend_package() {
 _uninstall_tvheadend_package() {
     apt-mark unhold tvheadend
 
-    ynh_package_autopurge tvheadend
+    _ynh_apt autoremove --purge tvheadend
 
     # Delete the system user created by the package
     deluser  hts --remove-home
