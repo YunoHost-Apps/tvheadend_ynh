@@ -1,11 +1,5 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
@@ -14,54 +8,53 @@ source /usr/share/yunohost/helpers
 #=================================================
 
 # Passwords are not saved by default.
-ynh_app_setting_set --app="$app" --key=password --value="$password"
+ynh_app_setting_set --key=password --value="$password"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression --message="Installing $app package..." --weight=1
+ynh_script_progression "Installing $app package..."
 
-chown -R "$app:www-data" "$install_dir"
-
+#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R "$app:www-data" "$install_dir"
 _install_tvheadend_package
 # The deb install automatically create the hts system user
 
 # Tvheadend automatically start after install
 # we stop it before the configuration
-ynh_systemd_action --service_name="$app" --action="stop"
+ynh_systemctl --service="$app" --action="stop"
 
 #=================================================
 # MODIFY TVHEADEND CONFIG FILES
 #=================================================
-ynh_script_progression --message="Update configuration files..." --weight=1
+ynh_script_progression "Update configuration files..."
 
 # Copy and modify /etc/default/tvheadend
 if [ "$path" = "/" ]; then
-    ynh_add_config --template="tvheadend_no_subpath" --destination="/etc/default/tvheadend"
+    ynh_config_add --template="tvheadend_no_subpath" --destination="/etc/default/tvheadend"
 else
-    ynh_add_config --template="tvheadend" --destination="/etc/default/tvheadend"
+    ynh_config_add --template="tvheadend" --destination="/etc/default/tvheadend"
 fi
 
 #=================================================
 # SYSTEM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding system configurations related to $app..." --weight=1
+ynh_script_progression "Adding system configurations related to $app..."
 
 # Create a dedicated NGINX config
-ynh_add_nginx_config
+ynh_config_add_nginx
 
 yunohost service add "$app" --description="TV streaming server and recorder" --needs_exposed_ports="$port_stream"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Starting a systemd service..." --weight=1
+ynh_script_progression "Starting $app's systemd service..."
 
 # Start a systemd service
-ynh_systemd_action --service_name="$app" --action="start"
+ynh_systemctl --service="$app" --action="start"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Installation of $app completed, HTSP port is $port_stream" --last
+ynh_script_progression "Installation of $app completed, HTSP port is $port_stream"

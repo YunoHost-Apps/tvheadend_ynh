@@ -1,83 +1,74 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# STANDARD UPGRADE STEPS
-#=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Stopping a systemd service..." --weight=3
+ynh_script_progression "Stopping $app's systemd service..."
 
-ynh_systemd_action --service_name="$app" --action="stop"
+ynh_systemctl --service="$app" --action="stop"
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
-ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
+ynh_script_progression "Ensuring downward compatibility..."
 
 if [[ -n "${conf_dir:-}" ]]; then
     # Now we use the standard /var/lib/tvheadend directory
-    ynh_secure_remove --file="$data_dir"
+    ynh_safe_rm "$data_dir"
     mv "$conf_dir" "$data_dir"
     chown -R "hts:video" "$data_dir"
 
-    ynh_app_setting_delete --app="$app" --key=conf_dir
+    ynh_app_setting_delete --key=conf_dir
 fi
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression --message="Installing $app package..." --weight=1
+ynh_script_progression "Installing $app package..."
 
-chown -R "$app:www-data" "$install_dir"
-
+#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R "$app:www-data" "$install_dir"
 _install_tvheadend_package
 # The deb install automatically create the hts system user
 
 # Tvheadend automatically start after install
 # we stop it before the configuration
-ynh_systemd_action --service_name="$app" --action="stop"
+ynh_systemctl --service="$app" --action="stop"
 
 #=================================================
 # MODIFY TVHEADEND CONFIG FILES
 #=================================================
-ynh_script_progression --message="Update configuration files..." --weight=1
+ynh_script_progression "Update configuration files..."
 
 # Copy and modify /etc/default/tvheadend
 if [ "$path" = "/" ]; then
-    ynh_add_config --template="tvheadend_no_subpath" --destination="/etc/default/tvheadend"
+    ynh_config_add --template="tvheadend_no_subpath" --destination="/etc/default/tvheadend"
 else
-    ynh_add_config --template="tvheadend" --destination="/etc/default/tvheadend"
+    ynh_config_add --template="tvheadend" --destination="/etc/default/tvheadend"
 fi
 
 #=================================================
 # REAPPLY SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression --message="Upgrading system configurations related to $app..." --weight=1
+ynh_script_progression "Upgrading system configurations related to $app..."
 
 # Create a dedicated NGINX config
-ynh_add_nginx_config
+ynh_config_add_nginx
 
 yunohost service add "$app" --description="TV streaming server and recorder" --needs_exposed_ports="$port_stream"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Starting a systemd service..." --weight=1
+ynh_script_progression "Starting $app's systemd service..."
 
 # Start a systemd service
-ynh_systemd_action --service_name="$app" --action="start"
+ynh_systemctl --service="$app" --action="start"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Upgrade of $app completed, HTSP port is $port_stream" --last
+ynh_script_progression "Upgrade of $app completed, HTSP port is $port_stream"
