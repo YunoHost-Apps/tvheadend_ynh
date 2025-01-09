@@ -49,30 +49,6 @@ ram.runtime = "50M" # FIXME: replace with an **estimate** minimum ram requiremen
     type = "password"
 
 [resources]
-    [resources.sources.main_bullseye]
-    
-    amd64.url = "https://dl.cloudsmith.io/public/tvheadend/tvheadend/deb/debian/pool/bullseye/main/t/tv/tvheadend_4.3-2323~g73a6bd00d~bullseye/tvheadend_4.3-2323~g73a6bd00d~bullseye_amd64.deb"
-    amd64.sha256 = "71f4ee6ad921bbb41b77964b3022f6bb1463d32ca9d0cd401a446c029fa6651a"
-    arm64.url = "https://dl.cloudsmith.io/public/tvheadend/tvheadend/deb/debian/pool/bullseye/main/t/tv/tvheadend_4.3-2192~gc9b38a81a~bullseye/tvheadend_4.3-2323~g73a6bd00d~bullseye_arm64.deb"
-    arm64.sha256 = "cfc808ff03c1b2eb4fc7486fa7c1c5bd7b789f1d5d110a75cc8ef9b47b013004"
-    armhf.url = "https://dl.cloudsmith.io/public/tvheadend/tvheadend/deb/debian/pool/bullseye/main/t/tv/tvheadend_4.3-2192~gc9b38a81a~bullseye/tvheadend_4.3-2323~g73a6bd00d~bullseye_armhf.deb"
-    armhf.sha256 = "48b75586c8117a46ef2cabbeb5b4b3e018b716c159851ad617ace1b9cabfdc91"
-
-    rename = "tvheadend.deb"
-    format = "whatever"
-    extract = false
-    prefetch = false
-
-    [resources.sources.main_bookworm]
-    amd64.url = "https://dl.cloudsmith.io/public/tvheadend/tvheadend/deb/debian/pool/bookworm/main/t/tv/tvheadend_4.3-2323~g73a6bd00d~bookworm/tvheadend_4.3-2323~g73a6bd00d~bookworm_amd64.deb"
-    amd64.sha256 = "656e0883952f3b797008133083c322e135c3ba0fc0d2d60dc14c6955f892f574"
-    # Upstream has no arm64 / armhf build for bookworm ? :|
-
-    rename = "tvheadend.deb"
-    format = "whatever"
-    extract = false
-    prefetch = false
-
     [resources.system_user]
 
     [resources.install_dir]
