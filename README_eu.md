@@ -5,7 +5,9 @@ EZ editatu eskuz.
 
 # Tvheadend YunoHost-erako
 
-[![Integrazio maila](https://dash.yunohost.org/integration/tvheadend.svg)](https://dash.yunohost.org/appci/app/tvheadend) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/tvheadend.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/tvheadend.maintain.svg)
+[![Integrazio maila](https://apps.yunohost.org/badge/integration/tvheadend)](https://ci-apps.yunohost.org/ci/apps/tvheadend/)
+![Funtzionamendu egoera](https://apps.yunohost.org/badge/state/tvheadend)
+![Mantentze egoera](https://apps.yunohost.org/badge/maintained/tvheadend)
 
 [![Instalatu Tvheadend YunoHost-ekin](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=tvheadend)
 
