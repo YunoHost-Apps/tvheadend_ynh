@@ -5,7 +5,9 @@ Il NE doit PAS être modifié à la main.
 
 # Tvheadend pour YunoHost
 
-[![Niveau d’intégration](https://dash.yunohost.org/integration/tvheadend.svg)](https://dash.yunohost.org/appci/app/tvheadend) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/tvheadend.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/tvheadend.maintain.svg)
+[![Niveau d’intégration](https://apps.yunohost.org/badge/integration/tvheadend)](https://ci-apps.yunohost.org/ci/apps/tvheadend/)
+![Statut du fonctionnement](https://apps.yunohost.org/badge/state/tvheadend)
+![Statut de maintenance](https://apps.yunohost.org/badge/maintained/tvheadend)
 
 [![Installer Tvheadend avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=tvheadend)
 

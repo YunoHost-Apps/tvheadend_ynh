@@ -5,7 +5,9 @@ No se debe editar a mano.
 
 # Tvheadend para Yunohost
 
-[![Nivel de integración](https://dash.yunohost.org/integration/tvheadend.svg)](https://dash.yunohost.org/appci/app/tvheadend) ![Estado funcional](https://ci-apps.yunohost.org/ci/badges/tvheadend.status.svg) ![Estado En Mantención](https://ci-apps.yunohost.org/ci/badges/tvheadend.maintain.svg)
+[![Nivel de integración](https://apps.yunohost.org/badge/integration/tvheadend)](https://ci-apps.yunohost.org/ci/apps/tvheadend/)
+![Estado funcional](https://apps.yunohost.org/badge/state/tvheadend)
+![Estado En Mantención](https://apps.yunohost.org/badge/maintained/tvheadend)
 
 [![Instalar Tvheadend con Yunhost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=tvheadend)
 
@@ -34,7 +36,7 @@ No se debe editar a mano.
 
 ## Información para desarrolladores
 
-Por favor enviar sus correcciones a la [`branch testing`](https://github.com/YunoHost-Apps/tvheadend_ynh/tree/testing
+Por favor enviar sus correcciones a la [rama `testing`](https://github.com/YunoHost-Apps/tvheadend_ynh/tree/testing).
 
 Para probar la rama `testing`, sigue asÍ:
 
