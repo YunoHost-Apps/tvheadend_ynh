@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#=================================================
+# COMMON VARIABLES AND CUSTOM HELPERS
+#=================================================
+
+
 _install_tvheadend_package() {
     # Pre-seed debconf database with answers of the interactive dpkg
     echo tvheadend tvheadend/admin_password password "$password" | debconf-set-selections
