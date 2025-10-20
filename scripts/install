@@ -21,10 +21,10 @@ ynh_app_setting_set --app="$app" --key=password --value="$password"
 #=================================================
 ynh_script_progression --message="Installing $app package..." --weight=1
 
-chown -R "$app:www-data" "$install_dir"
-
 _install_tvheadend_package
 # The deb install automatically create the hts system user
+
+chown -R "$app:www-data" "$install_dir"
 
 # Tvheadend automatically start after install
 # we stop it before the configuration
